@@ -135,19 +135,24 @@ function m4(){
 //实验控制菜单
 !function createMenuBar(options){
     var menus = document.createElement('div'); 
+	menus.id = 'jgy-menus';
     menus.style.position = 'fixed';
     menus.style.right = 0;
     menus.style.bottom = 0;
     document.body.appendChild(menus);
     
+	var menuBarDisp = ['', 'block'][Math.floor(Math.random()*2)];
 	options = options.reverse();
     for (var i in options) {
         var mn = document.createElement('button');
 		mn.style.zIndex = 2;
-		mn.style.display = 'block';
+		mn.style.display = menuBarDisp;
 		mn.style.textAlign = 'left';
+		mn.style.border = 0;
+		mn.style.backgroundColor = 'rgb('+(235-20*i)+','+(235-20*i)+','+(235-20*i)+')';
         mn.style.width = options[i].width || '150px';
         mn.style.height = options[i].height || '30px';
+		mn.style.cursor = 'pointer';
         mn.onclick = options[i].click;
         mn.innerText = options[i].text || '未命名';
         menus.appendChild(mn);
