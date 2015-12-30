@@ -82,3 +82,17 @@ for (var i = 0; i < 100; i ++) {
         }, 1);
     }(sb2);
 }
+//金馆鱼服务3：随地克隆
+var sb3 = new Jinguanyu('sb3', 800, 550);
+var sb3i = 0;
+sb3.node.onclick = function(evt){
+	console.log({"点击":['sb3' + sb3i++, sb3.left, sb3.top]});
+	var sb33 = new Jinguanyu('sb3' + sb3i++, sb3.left, sb3.top);
+	!function(sb33inner){
+		setInterval(function(){
+			var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+			var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+			sb33inner.move(x, y);       
+		}, 1);	
+	}(sb33);
+};
