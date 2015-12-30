@@ -88,7 +88,7 @@ function m2(){
 }
 //金馆鱼服务3：随地克隆
 function m3(){
-    var sb3 = new Jinguanyu('sb3', 100, 100);
+    var sb3 = new Jinguanyu('sb3'+Math.random()*100000, 100, 100);
     var sb3i = 0;
     sb3.node.onclick = function(evt){
         console.log({"点击":['sb3' + sb3i++, sb3.left, sb3.top]});
