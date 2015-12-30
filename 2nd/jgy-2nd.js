@@ -73,22 +73,22 @@ window.Jinguanyu = function(id, x, y){
 
 //金馆鱼服务0：销毁所有[class=jgy]
 function m0(){
-	var jgys = document.getElementsByClassName('jgy')
-	for (var i in jgys) {
-		jgys[i].outerHTML = '';
-	}
+    var jgys = document.getElementsByClassName('jgy')
+    for (var i in jgys) {
+        jgys[i].outerHTML = '';
+    }
 }
 //金馆鱼服务1：斜向移动
 function m1(){
     var sb1 = new Jinguanyu('sb1'+Math.random()*100000, 1, 1);
-	sb1.node.className = 'jgy';
+    sb1.node.className = 'jgy';
     setInterval(function(){sb1.move(1, 1)}, 10);
 }
 //金馆鱼服务2：裂变
 function m2(){
     for (var i = 0; i < 100; i ++) {
         var sb2 = new Jinguanyu('sb2'+Math.random()*100000+i, 500, 500);
-		sb2.node.className = 'jgy';
+        sb2.node.className = 'jgy';
         !function(ssbb){
             setInterval(function(){
                 var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
@@ -101,12 +101,12 @@ function m2(){
 //金馆鱼服务3：投放建造基地
 function m3(){
     var sb3 = new Jinguanyu('sb3'+Math.random()*100000, 100, 100);
-	sb3.node.className = 'jgy';
+    sb3.node.className = 'jgy';
     var sb3i = 0;
     sb3.node.onclick = function(evt){
         console.log({"点击":['sb3' + sb3i++, sb3.left, sb3.top]});
         var sb33 = new Jinguanyu('sb3' + sb3i++, sb3.left, sb3.top);
-		sb33.node.className = 'jgy';
+        sb33.node.className = 'jgy';
         !function(sb33inner){
             setInterval(function(){
                 var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
@@ -118,41 +118,41 @@ function m3(){
 }
 //金馆鱼服务4：扔垃圾
 function m4(){
-	var x = Math.random() * (window.screen.width - 100) + 50;
-	var y = Math.random() * (window.screen.height - 50) + 50;
-	var sb4 = new Jinguanyu('sb4'+Math.random()*100000, x, y);
-	sb4.node.className = 'jgy';
-	!function(sb4inner){
-		setInterval(function(){
-			var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
-			var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
-			sb4inner.move(x, y);
-		}, 1);
-	}(sb4);
+    var x = Math.random() * (window.screen.width - 100) + 50;
+    var y = Math.random() * (window.screen.height - 50) + 50;
+    var sb4 = new Jinguanyu('sb4'+Math.random()*100000, x, y);
+    sb4.node.className = 'jgy';
+    !function(sb4inner){
+        setInterval(function(){
+            var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+            var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+            sb4inner.move(x, y);
+        }, 1);
+    }(sb4);
 }
 
 
 //实验控制菜单
 !function createMenuBar(options){
     var menus = document.createElement('div'); 
-	menus.id = 'jgy-menus';
+    menus.id = 'jgy-menus';
     menus.style.position = 'fixed';
     menus.style.right = 0;
     menus.style.bottom = 0;
     document.body.appendChild(menus);
     
-	var menuBarDisp = ['', 'block'][Math.floor(Math.random()*2)];
-	options = options.reverse();
+    var menuBarDisp = ['', 'block'][Math.floor(Math.random()*2)];
+    options = options.reverse();
     for (var i in options) {
         var mn = document.createElement('button');
-		mn.style.zIndex = 2;
-		mn.style.display = menuBarDisp;
-		mn.style.textAlign = 'left';
-		mn.style.border = 0;
-		mn.style.backgroundColor = 'rgb('+(235-20*i)+','+(235-20*i)+','+(235-20*i)+')';
+        mn.style.zIndex = 2;
+        mn.style.display = menuBarDisp;
+        mn.style.textAlign = 'left';
+        mn.style.border = 0;
+        mn.style.backgroundColor = 'rgb('+(235-20*i)+','+(235-20*i)+','+(235-20*i)+')';
         mn.style.width = options[i].width || '150px';
         mn.style.height = options[i].height || '30px';
-		mn.style.cursor = 'pointer';
+        mn.style.cursor = 'pointer';
         mn.onclick = options[i].click;
         mn.innerText = options[i].text || '未命名';
         menus.appendChild(mn);
