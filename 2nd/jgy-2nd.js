@@ -67,6 +67,10 @@ window.Jinguanyu = function(id, x, y){
 
 
 
+
+
+
+
 //金馆鱼服务0：销毁所有[class=jgy]
 function m0(){
 	var jgys = document.getElementsByClassName('jgy')
@@ -94,7 +98,7 @@ function m2(){
         }(sb2);
     }
 }
-//金馆鱼服务3：随地克隆
+//金馆鱼服务3：投放建造基地
 function m3(){
     var sb3 = new Jinguanyu('sb3'+Math.random()*100000, 100, 100);
 	sb3.node.className = 'jgy';
@@ -112,6 +116,20 @@ function m3(){
         }(sb33);
     };
 }
+//金馆鱼服务4：扔垃圾
+function m4(){
+	var x = Math.random() * (window.screen.width - 100) + 50;
+	var y = Math.random() * (window.screen.height - 50) + 50;
+	var sb4 = new Jinguanyu('sb4'+Math.random()*100000, x, y);
+	sb4.node.className = 'jgy';
+	!function(sb4inner){
+		setInterval(function(){
+			var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+			var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+			sb4inner.move(x, y);
+		}, 1);
+	}(sb4);
+}
 
 
 //实验控制菜单
@@ -122,24 +140,31 @@ function m3(){
     menus.style.bottom = 0;
     document.body.appendChild(menus);
     
+	options = options.reverse();
     for (var i in options) {
         var mn = document.createElement('button');
-        mn.style.width = options[i].width || '200px';
+		mn.style.zIndex = 2;
+		mn.style.display = 'block';
+		mn.style.textAlign = 'left';
+        mn.style.width = options[i].width || '150px';
         mn.style.height = options[i].height || '30px';
         mn.onclick = options[i].click;
         mn.innerText = options[i].text || '未命名';
         menus.appendChild(mn);
     }
 }([{
-    text: '销毁所有',
+    text: '0、销毁所有',
     click: m0
 }, {
-    text: '斜向移动',
+    text: '1、斜向移动',
     click: m1
 }, {
-    text: '核裂变',
+    text: '2、核裂变',
     click: m2
 }, {
-    text: '一次生成，到处克隆',
+    text: '3、投放建造基地',
     click: m3
+}, {
+    text: '4、扔垃圾',
+    click: m4
 }]);
