@@ -70,13 +70,13 @@ window.Jinguanyu = function(id, x, y){
 
 //金馆鱼服务1：斜向移动
 function m1(){
-    var sb1 = new Jinguanyu('sb1', 1, 1);
+    var sb1 = new Jinguanyu('sb1'+Math.random()*100000, 1, 1);
     setInterval(function(){sb1.move(1, 1)}, 10);
 }
 //金馆鱼服务2：裂变
 function m2(){
     for (var i = 0; i < 100; i ++) {
-        var sb2 = new Jinguanyu('sb2'+i, 500, 500); 
+        var sb2 = new Jinguanyu('sb2'+Math.random()*100000+i, 500, 500); 
         !function(ssbb){
             setInterval(function(){
                 var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
