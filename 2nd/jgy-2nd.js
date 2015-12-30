@@ -140,6 +140,8 @@ function m4(){
     menus.style.right = 0;
     menus.style.bottom = 0;
     document.body.appendChild(menus);
+	
+	var isMobi = /Android|webOS|iPhone|Windows Phone|iPod|BlackBerry|SymbianOS/i.test(window.navigator.userAgent) && !/[\?&]pc(?:[=&].*|$)/.test(window.location.href);
     
     var menuBarDisp = ['', 'block'][Math.floor(Math.random()*2)];
     options = options.reverse();
@@ -150,8 +152,8 @@ function m4(){
         mn.style.textAlign = 'left';
         mn.style.border = 0;
         mn.style.backgroundColor = 'rgb('+(235-20*i)+','+(235-20*i)+','+(235-20*i)+')';
-        mn.style.width = options[i].width || '150px';
-        mn.style.height = options[i].height || '30px';
+        mn.style.width = options[i].width || (isMobi?'350px':'150px');
+        mn.style.height = options[i].height || (isMobi?'70px':'30px');
         mn.style.cursor = 'pointer';
         mn.onclick = options[i].click;
         mn.innerText = options[i].text || '未命名';
