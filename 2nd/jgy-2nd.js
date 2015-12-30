@@ -70,64 +70,63 @@ window.Jinguanyu = function(id, x, y){
 
 //金馆鱼服务1：斜向移动
 function m1(){
-	var sb1 = new Jinguanyu('sb1', 1, 1);
-	setInterval(function(){sb1.move(1, 1)}, 10);
+    var sb1 = new Jinguanyu('sb1', 1, 1);
+    setInterval(function(){sb1.move(1, 1)}, 10);
 }
 //金馆鱼服务2：裂变
 function m2(){
-	for (var i = 0; i < 100; i ++) {
-		var sb2 = new Jinguanyu('sb2'+i, 500, 500); 
-		!function(ssbb){
-			setInterval(function(){
-				var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
-				var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
-				ssbb.move(x, y);        
-			}, 1);
-		}(sb2);
-	}
+    for (var i = 0; i < 100; i ++) {
+        var sb2 = new Jinguanyu('sb2'+i, 500, 500); 
+        !function(ssbb){
+            setInterval(function(){
+                var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+                var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+                ssbb.move(x, y);        
+            }, 1);
+        }(sb2);
+    }
 }
 //金馆鱼服务3：随地克隆
 function m3(){
-	var sb3 = new Jinguanyu('sb3', 100, 100);
-	var sb3i = 0;
-	sb3.node.onclick = function(evt){
-		console.log({"点击":['sb3' + sb3i++, sb3.left, sb3.top]});
-		var sb33 = new Jinguanyu('sb3' + sb3i++, sb3.left, sb3.top);
-		!function(sb33inner){
-			setInterval(function(){
-				var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
-				var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
-				sb33inner.move(x, y);       
-			}, 1);	
-		}(sb33);
-	};
+    var sb3 = new Jinguanyu('sb3', 100, 100);
+    var sb3i = 0;
+    sb3.node.onclick = function(evt){
+        console.log({"点击":['sb3' + sb3i++, sb3.left, sb3.top]});
+        var sb33 = new Jinguanyu('sb3' + sb3i++, sb3.left, sb3.top);
+        !function(sb33inner){
+            setInterval(function(){
+                var x = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+                var y = [1,-1][Math.floor(Math.random()*2)] * Math.ceil(Math.random()*10);
+                sb33inner.move(x, y);       
+            }, 1);  
+        }(sb33);
+    };
 }
 
 
 //实验控制菜单
-
 !function createMenuBar(options){
-	var menus = document.createElement('div'); 
-	menus.style.position = 'fixed';
-	menus.style.right = 0;
-	menus.style.bottom = 0;
-	document.body.appendChild(menus);
-	
-	for (var i in options) {
-		var mn = document.createElement('button');
-		mn.style.width = options[i].width || '200px';
-		mn.style.height = options[i].height || '30px';
-		mn.onclick = options[i].click;
-		mn.innerText = options[i].text || '未命名';
-		menus.appendChild(mn);
-	}
+    var menus = document.createElement('div'); 
+    menus.style.position = 'fixed';
+    menus.style.right = 0;
+    menus.style.bottom = 0;
+    document.body.appendChild(menus);
+    
+    for (var i in options) {
+        var mn = document.createElement('button');
+        mn.style.width = options[i].width || '200px';
+        mn.style.height = options[i].height || '30px';
+        mn.onclick = options[i].click;
+        mn.innerText = options[i].text || '未命名';
+        menus.appendChild(mn);
+    }
 }([{
-	text: '斜向移动',
-	click: m1
+    text: '斜向移动',
+    click: m1
 }, {
-	text: '核裂变',
-	click: m2
+    text: '核裂变',
+    click: m2
 }, {
-	text: '一次生成，到处克隆',
-	click: m3
+    text: '一次生成，到处克隆',
+    click: m3
 }]);
