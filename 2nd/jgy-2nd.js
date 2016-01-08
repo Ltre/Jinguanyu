@@ -3,13 +3,13 @@
  * @author Ltre Oreki<ltrele@gmail.com>
  * @since 2015-10-30
  */
-window.Jinguanyu = function(id, x, y){
+window.Jinguanyu = function(id, x, y, src){
     var _this = this;
     this.id = null;
     this.node = null;
     this.width = 100;
     this.height = 100;
-    this.src = 'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif';
+    this.src = src || 'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif';
     this.left = 0;
     this.top = 0;
     this.move = function(offsetX, offsetY){
