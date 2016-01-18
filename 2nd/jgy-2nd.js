@@ -12,15 +12,19 @@ window.Jinguanyu = function(id, x, y, src){
     this.src = src || 'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif';
     this.left = 0;
     this.top = 0;
+    this.trendX = 0;//当前水平移动步长（右正左负）
+    this.trendY = 0;//当前竖直移动步长（下正上负）
     this.move = function(offsetX, offsetY){
         this.moveX(offsetX);
         this.moveY(offsetY);
     };
     this.moveX = function(x){
         this.setX(this.left + x);
+        this.trendX = x;
     };
     this.moveY = function(y){
         this.setY(this.top + y);
+        this.trendY = y;
     };
     this.setX = function(x){
         this.left = x;
@@ -130,6 +134,29 @@ function m4(){
         }, 1);
     }(sb4);
 }
+//金馆鱼服务5：碰撞
+function m5(){
+    var sb5 = new Jinguanyu('sb5-'+Math.random()*10000, 120, 120);
+    sb5.node.className = 'jgy';
+    sb5.move(1, 1);
+    setInterval(function(){
+        var atLeft = sb5.left == 0;
+        var atRight = sb5.left + sb5.width == window.screen.width;
+        var atTop = sb5.top == 0;
+        var atBottom = sb5.top + sb5.height == window.screen.height;
+        console.log(sb5.top, sb5.left, sb5.trendY, sb5.trendX);
+        console.log(atTop, atRight, atBottom, atLeft);
+        if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
+            sb5.move(-sb5.trendX, -sb5.trendY);
+        } else if (atTop || atBottom) {
+            sb5.move(sb5.trendX, -sb5.trendY);
+        } else if (atLeft || atRight) {
+            sb5.move(-sb5.trendX, sb5.trendY);
+        } else {
+            sb5.move(sb5.trendX, sb5.trendY);
+        }
+    }, 10);
+}
 
 
 //实验控制菜单
@@ -174,4 +201,7 @@ function m4(){
 }, {
     text: '4、扔垃圾',
     click: m4
+}, {
+    text: '5、碰撞',
+    click: m5
 }]);
