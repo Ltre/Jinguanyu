@@ -159,21 +159,6 @@ function m5(){
 }
 //金馆鱼服务6：射击(点击屏幕两个点，进行路径设定，射击速度根据路径长短而定)，有BUG
 function m6(){
-    var zdgys = function(a, b){
-        var tmp, r;
-        if (a < b) {
-            tmp = a;
-            a = b;
-            b = tmp;
-        }
-        var tmpA = a, tmpB = b;
-        while (b != 0) {
-            r = Math.floor(a % b);
-            a = b;
-            b = r;
-        }
-        return a;
-    };
     var tmp = document.createElement('div');//添加临时遮罩层
     tmp.innerText = '点击屏幕任意两个位置';
     tmp.style.fontSize = window.screen.height / 10 + 'px';
@@ -199,34 +184,30 @@ function m6(){
         }
         if (tmp.trendPath.start && tmp.trendPath.end) {
             !function(start, end, tmp){
-                //console.log({start:start, end:end, tmp:tmp});
                 console.log('开始', start[0], end[0]);
                 var tmp_m6 = new Jinguanyu('tmp-m6-'+Math.random()*10000, start[0], start[1]);
                 tmp_m6.node.className = 'jgy';
                 var moveX = end[0] - start[0];
                 var moveY = end[1] - start[1];
-                var ratio = zdgys(moveX, moveY);
                 var pathLen = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
                 var screenLen = Math.sqrt(Math.pow(window.screen.width, 2) + Math.pow(window.screen.height, 2));
-                var speed = Math.ceil((1 - pathLen / screenLen) * 1000);
+                var speed = Math.ceil((1 - pathLen / screenLen) * 100);
                 console.log({speed:speed});
                 var minMoveX = moveX, minMoveY = moveY;
                 for (var i = 0; i < 3600; i ++) {
                     var tan = Math.tan(i/1800*Math.PI);
                     console.log({tan:tan, move:moveY/moveX});
                     if (Math.abs(tan - moveY/moveX) < 1e-3) {
-                        minMoveX = Math.floor(10 * tan);
-                        minMoveY = 10;
+                        minMoveX = Math.floor((minMoveX>0?10:-10) * tan);
+                        minMoveY = minMoveY>0?10:-10;
                         break;
                     }
                 }
                 setInterval(function(){
-                    //console.log('hehe', moveX>=moveY?moveX/moveY*10:10, moveY>=moveX?moveY/moveX*10:10);
-                    //tmp_m6.move(moveX>=moveY?moveX/moveY*10:10, moveY>=moveX?moveY/moveX*10:10);
                     console.log('hehe', minMoveX, minMoveY);
                     tmp_m6.move(minMoveX, minMoveY);
-                    tmp.outerHTML = '';
                 }, speed);                    
+                tmp.outerHTML = '';
             }(tmp.trendPath.start, tmp.trendPath.end, tmp);
         }
         console.log({trendPath:tmp.trendPath});
@@ -234,7 +215,41 @@ function m6(){
 }
 //金馆鱼服务7：圆场
 function m7(){
-    
+    var center = [300, 300];
+    var radius = 150;
+    var sb7 = new Jinguanyu('sb7'+Math.random()*10000, center[0]+radius, center[1]);
+    sb7.node.className = 'jgy';
+    var i = 0;
+    setInterval(function(){
+        var left = radius * Math.cos(Math.PI * i / 600) + center[0];
+        var top = radius * Math.sin(Math.PI * i / 600) + center[1];
+        console.log(left, top);
+        sb7.setX(left);
+        sb7.setY(top);
+        i ++;
+    }, 1);
+}
+//金馆鱼服务8：中毒圆场
+function m8(){
+    var center = [600, 200];
+    var radius = 200;
+    for (var i = 0; i < 50; i++) {
+        !function(ii){            
+            var sb8 = new Jinguanyu('sb7'+Math.random()*10000, center[0]+radius, center[1]);
+            sb8.node.className = 'jgy';
+            var j = 0;
+            setTimeout(function(){                
+                setInterval(function(){
+                    var left = radius * Math.cos(Math.PI * j / 600) + center[0];
+                    var top = radius * Math.sin(Math.PI * j / 600) + center[1];
+                    console.log(left, top);
+                    sb8.setX(left);
+                    sb8.setY(top);
+                    j ++;
+                }, 1);        
+            }, ii*100);
+        }(i);
+    }
 }
 
 
@@ -257,7 +272,7 @@ function m7(){
         mn.style.display = menuBarDisp;
         mn.style.textAlign = 'left';
         mn.style.border = 0;
-        mn.style.backgroundColor = 'rgb('+(235-20*i)+','+(235-20*i)+','+(235-20*i)+')';
+        mn.style.backgroundColor = 'rgb('+(235-10*i)+','+(235-10*i)+','+(235-10*i)+')';
         mn.style.width = options[i].width || (isMobi?'350px':'150px');
         mn.style.height = options[i].height || (isMobi?'70px':'30px');
         mn.style.cursor = 'pointer';
@@ -289,4 +304,7 @@ function m7(){
 }, {
     text: '7、圆场',
     click: m7
+}, {
+    text: '8、中毒原场',
+    click: m8
 }]);
