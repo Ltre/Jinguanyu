@@ -134,16 +134,16 @@ function m4(){
         }, 1);
     }(sb4);
 }
-//金馆鱼服务5：碰撞
+//金馆鱼服务5：反弹(速度和方向可以对move()进行调整)
 function m5(){
     var sb5 = new Jinguanyu('sb5-'+Math.random()*10000, 120, 120);
     sb5.node.className = 'jgy';
     sb5.move(1, 1);
     setInterval(function(){
-        var atLeft = sb5.left == 0;
-        var atRight = sb5.left + sb5.width == window.screen.width;
-        var atTop = sb5.top == 0;
-        var atBottom = sb5.top + sb5.height == window.screen.height;
+        var atLeft = sb5.left <= 0;
+        var atRight = sb5.left + sb5.width >= window.screen.width;
+        var atTop = sb5.top <= 0;
+        var atBottom = sb5.top + sb5.height >= window.screen.height;
         console.log(sb5.top, sb5.left, sb5.trendY, sb5.trendX);
         console.log(atTop, atRight, atBottom, atLeft);
         if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
@@ -155,7 +155,86 @@ function m5(){
         } else {
             sb5.move(sb5.trendX, sb5.trendY);
         }
-    }, 10);
+    }, 1);
+}
+//金馆鱼服务6：射击(点击屏幕两个点，进行路径设定，射击速度根据路径长短而定)，有BUG
+function m6(){
+    var zdgys = function(a, b){
+        var tmp, r;
+        if (a < b) {
+            tmp = a;
+            a = b;
+            b = tmp;
+        }
+        var tmpA = a, tmpB = b;
+        while (b != 0) {
+            r = Math.floor(a % b);
+            a = b;
+            b = r;
+        }
+        return a;
+    };
+    var tmp = document.createElement('div');//添加临时遮罩层
+    tmp.innerText = '点击屏幕任意两个位置';
+    tmp.style.fontSize = window.screen.height / 10 + 'px';
+    tmp.style.fontFamily = '微软雅黑';
+    tmp.style.textAlign = 'center';
+    tmp.style.lineHeight = window.screen.height + 'px';
+    tmp.style.zIndex = '+1000';
+    tmp.style.position = 'fixed';
+    tmp.style.left = '0';
+    tmp.style.top = '0';
+    tmp.style.width = window.screen.width + 'px';
+    tmp.style.height = window.screen.height + 'px';
+    tmp.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    tmp.style.cursor = 'pointer';
+    document.body.appendChild(tmp);
+    tmp.onclick = function(evt){
+        //debugger;
+        if (undefined === tmp.trendPath) tmp.trendPath = {};
+        if (undefined === tmp.trendPath.start) {
+            tmp.trendPath.start = [evt.clientX, evt.clientY];
+        } else if (undefined === tmp.trendPath.end) {
+            tmp.trendPath.end = [evt.clientX, evt.clientY];
+        }
+        if (tmp.trendPath.start && tmp.trendPath.end) {
+            !function(start, end, tmp){
+                //console.log({start:start, end:end, tmp:tmp});
+                console.log('开始', start[0], end[0]);
+                var tmp_m6 = new Jinguanyu('tmp-m6-'+Math.random()*10000, start[0], start[1]);
+                tmp_m6.node.className = 'jgy';
+                var moveX = end[0] - start[0];
+                var moveY = end[1] - start[1];
+                var ratio = zdgys(moveX, moveY);
+                var pathLen = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+                var screenLen = Math.sqrt(Math.pow(window.screen.width, 2) + Math.pow(window.screen.height, 2));
+                var speed = Math.ceil((1 - pathLen / screenLen) * 1000);
+                console.log({speed:speed});
+                var minMoveX = moveX, minMoveY = moveY;
+                for (var i = 0; i < 3600; i ++) {
+                    var tan = Math.tan(i/1800*Math.PI);
+                    console.log({tan:tan, move:moveY/moveX});
+                    if (Math.abs(tan - moveY/moveX) < 1e-3) {
+                        minMoveX = Math.floor(10 * tan);
+                        minMoveY = 10;
+                        break;
+                    }
+                }
+                setInterval(function(){
+                    //console.log('hehe', moveX>=moveY?moveX/moveY*10:10, moveY>=moveX?moveY/moveX*10:10);
+                    //tmp_m6.move(moveX>=moveY?moveX/moveY*10:10, moveY>=moveX?moveY/moveX*10:10);
+                    console.log('hehe', minMoveX, minMoveY);
+                    tmp_m6.move(minMoveX, minMoveY);
+                    tmp.outerHTML = '';
+                }, speed);                    
+            }(tmp.trendPath.start, tmp.trendPath.end, tmp);
+        }
+        console.log({trendPath:tmp.trendPath});
+    };
+}
+//金馆鱼服务7：圆场
+function m7(){
+    
 }
 
 
@@ -204,4 +283,10 @@ function m5(){
 }, {
     text: '5、碰撞',
     click: m5
+}, {
+    text: '6、射击（有BUG）',
+    click: m6
+}, {
+    text: '7、圆场',
+    click: m7
 }]);
