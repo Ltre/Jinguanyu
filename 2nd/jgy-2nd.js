@@ -251,6 +251,32 @@ function m8(){
         }(i);
     }
 }
+//金馆鱼服务9：路径复用
+function m9(){
+    //手动移动，导出路径串
+    var tmp = document.createElement('div');//添加临时遮罩层
+    tmp.innerHTML = '按住鼠标，随意划一条线，随后松开';
+    tmp.style.fontSize = window.screen.height / 15 + 'px';
+    tmp.style.fontFamily = '微软雅黑';
+    tmp.style.textAlign = 'center';
+    tmp.style.lineHeight = window.screen.height + 'px';
+    tmp.style.zIndex = '+1000';
+    tmp.style.position = 'fixed';
+    tmp.style.left = '0';
+    tmp.style.top = '0';
+    tmp.style.width = window.screen.width + 'px';
+    tmp.style.height = window.screen.height + 'px';
+    tmp.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    tmp.style.cursor = 'pointer';
+    document.body.appendChild(tmp);
+    var path = [];
+    //输入路径串，开始移动
+}
+//金馆鱼服务10：路径记忆
+function m10(){
+    //手动移动，记录路径
+}
+
 
 
 //实验控制菜单
@@ -307,4 +333,10 @@ function m8(){
 }, {
     text: '8、中毒圆场',
     click: m8
+}, {
+    text: '9、输入路径',
+    click: m9
+}, {
+    text: '10、路径记忆',
+    click: m10
 }]);
