@@ -246,7 +246,7 @@ function m8(){
                     sb8.setX(left);
                     sb8.setY(top);
                     j ++;
-                }, 1);        
+                }, 1);
             }, ii*100);
         }(i);
     }
@@ -305,6 +305,6 @@ function m8(){
     text: '7、圆场',
     click: m7
 }, {
-    text: '8、中毒原场',
+    text: '8、中毒圆场',
     click: m8
 }]);
