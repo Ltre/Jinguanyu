@@ -14,9 +14,43 @@ window.Jinguanyu = function(id, x, y, src){
     this.top = 0;
     this.trendX = 0;//当前水平移动步长（右正左负）
     this.trendY = 0;//当前竖直移动步长（下正上负）
+    this.trend = 0;//trendX与trendY的合成步长
     this.move = function(offsetX, offsetY){
         this.moveX(offsetX);
         this.moveY(offsetY);
+        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
+    };
+    this.forward = function(offset){
+        offset = offset || this.trend;
+        if (0 == this.trend) return;
+        var ratio = offset / this.trend;
+        this.move(this.trendX * ratio, this.trendY * ratio);
+    };
+    this.backward = function(offset){
+        offset = offset || this.trend;
+        if (0 == this.trend) return;
+        var ratio = offset / this.trend;
+        this.move(- this.trendX * ratio, - this.trendY * ratio);
+    };
+    this.leftward = function(offset){
+        offset = offset || this.trend;
+        if (0 == this.trend) return;
+        var ratio = offset / this.trend;
+        if (this.trendX * this.trendY >= 0) {
+            this.move(this.trendX * ratio, - this.trendY * ratio);
+        } else {
+            this.move(- this.trendX * ratio, this.trendY * ratio);
+        }
+    };
+    this.rightward = function(offset){
+        offset = offset || this.trend;
+        if (0 == this.trend) return;
+        var ratio = offset / this.trend;
+        if (this.trendX * this.trendY >= 0) {
+            this.move(- this.trendX * ratio, this.trendY * ratio);
+        } else {
+            this.move(this.trendX * ratio, - this.trendY * ratio);
+        }
     };
     this.moveX = function(x){
         this.setX(this.left + x);
@@ -33,6 +67,16 @@ window.Jinguanyu = function(id, x, y, src){
     this.setY = function(y){
         this.top = y;
         this.node.style.top = this.top + 'px';
+    };
+    this.setWidth = function(w){
+        if (! w) return;
+        this.width = w;
+        this.node.style.width = w + 'px';
+    };
+    this.setHeight = function(h){
+        if (! h) return;
+        this.height = h;
+        this.node.style.height = h + 'px';
     };
     this.initPosition = function(){
         this.node.style.position = 'fixed';
@@ -134,7 +178,7 @@ function m4(){
         }, 1);
     }(sb4);
 }
-//金馆鱼服务5：反弹(速度和方向可以对move()进行调整)
+//金馆鱼服务5：反射(速度和方向可以对move()进行调整)
 function m5(){
     var sb5 = new Jinguanyu('sb5-'+Math.random()*10000, 120, 120);
     sb5.node.className = 'jgy';
@@ -272,10 +316,129 @@ function m9(){
     var path = [];
     //输入路径串，开始移动
 }
-//金馆鱼服务10：路径记忆
+//金馆鱼服务10：外力作用
 function m10(){
-    //手动移动，记录路径
+    alert('还没做呢');
 }
+//金馆鱼服务11：经典转向
+function m11(){
+    var sb11 = new Jinguanyu('sb11'+Math.random()*10000, 300, 300);
+    sb11.className = 'jgy';
+    //延时器代码取自：https://github.com/Ltre/Ltre.js/blob/master/time/timing.js
+    var timing = function(options){var a=options.a||0,z=options.z||100,step=options.step||+1,amplTop=options.amplTop||+20,amplBot=options.amplBot||-15,delay=options.delay||10;var onStart=options.onStart||function(i){},onTiming=options.onTiming||function(i){},onStop=options.onStop||function(i){};var i=a;!function f(){if(i<z){if(a==i){onStart(i);}else{onTiming(i);}var freq=amplTop-amplBot;var randFreq=amplBot+Math.random()*(amplTop-amplBot);setTimeout(f,delay+randFreq)}else{onStop(i);}i+=step;}()};
+    timing({
+        z: 200,
+        delay: 10,
+        onStart: function(i){
+            console.log(i);
+            sb11.move(2, 2);
+        },
+        onTiming: function(i){
+            console.log(i);
+            if (50 == i) {
+                sb11.backward();
+            } else if (100 == i) {
+                sb11.rightward(5);
+            } else if (150 == i) {
+                sb11.leftward(8);
+            } else {
+                sb11.forward(3);
+            }
+        },
+        onStop: function(i){
+            console.log(i);
+            sb11.node.style.width = sb11.width / 2 + 'px';
+            sb11.node.style.height = sb11.height / 2 + 'px';
+            console.log('wocao');
+        }
+    });
+}
+//金馆鱼服务12：经典转向+反射
+function m12(){
+    var sb12 = new Jinguanyu('sb12'+Math.random()*10000, 300, 300);
+    sb12.className = 'jgy';
+    //延时器代码取自：https://github.com/Ltre/Ltre.js/blob/master/time/timing.js
+    var timing = function(options){var a=options.a||0,z=options.z||100,step=options.step||+1,amplTop=options.amplTop||+20,amplBot=options.amplBot||-15,delay=options.delay||10;var onStart=options.onStart||function(i){},onTiming=options.onTiming||function(i){},onStop=options.onStop||function(i){};var i=a;!function f(){if(i<z){if(a==i){onStart(i);}else{onTiming(i);}var freq=amplTop-amplBot;var randFreq=amplBot+Math.random()*(amplTop-amplBot);setTimeout(f,delay+randFreq)}else{onStop(i);}i+=step;}()};
+    timing({
+        z: 1000,
+        delay: 10,
+        onStart: function(i){
+            console.log(i);
+            sb12.move(2, 2);
+        },
+        onTiming: function(i){
+            console.log(i);
+            //边缘检测
+            var atLeft = sb12.left <= 0;
+            var atRight = sb12.left + sb12.width >= window.screen.width;
+            var atTop = sb12.top <= 0;
+            var atBottom = sb12.top + sb12.height >= window.screen.height;
+            if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
+                sb12.move(-sb12.trendX, -sb12.trendY);
+            } else if (atTop || atBottom) {
+                sb12.move(sb12.trendX, -sb12.trendY);
+            } else if (atLeft || atRight) {
+                sb12.move(-sb12.trendX, sb12.trendY);
+            } else {
+                sb12.move(sb12.trendX, sb12.trendY);
+            }
+            //计划转向
+            var action = ['backward', 'leftward', 'rightward'];
+            var maxTrend = 50;
+            if (0 == i % 100) {
+                sb12[action[Math.floor(Math.random()*action.length)]] (Math.ceil(Math.random()*maxTrend));
+            } else {
+                sb12.forward();
+            }
+        },
+        onStop: function(i){
+            console.log(i);
+            timing({
+                z: 200,
+                delay: 10,
+                onTiming: function(i){
+                    sb12.setWidth(sb12.width + 1);
+                    sb12.setHeight(sb12.height + 1);                    
+                    sb12.setX(window.screen.width/2 - sb12.width/2);
+                    sb12.setY(window.screen.height/2 - sb12.height/2);
+                }
+            });
+            console.log('wocao', window.screen.width/2 - sb12.width/2, window.screen.height/2 - sb12.height/2);
+        }
+    });
+}
+//金馆鱼服务13：角度运动(移动角度有BUG)
+function m13(){
+    alert('有BUG，还没完成');
+    var speed = 5;
+    var degree = -30;
+    var sb13 = new Jinguanyu('sb13'+Math.random()*10000, 300, 100);
+    sb13.className = 'jgy';
+    var x = speed * Math.sin(Math.PI * degree / 180);
+    var y = speed * Math.cos(Math.PI * degree / 180);
+    console.log(x, y);
+    //延时器代码取自：https://github.com/Ltre/Ltre.js/blob/master/time/timing.js
+    var timing = function(options){var a=options.a||0,z=options.z||100,step=options.step||+1,amplTop=options.amplTop||+20,amplBot=options.amplBot||-15,delay=options.delay||10;var onStart=options.onStart||function(i){},onTiming=options.onTiming||function(i){},onStop=options.onStop||function(i){};var i=a;!function f(){if(i<z){if(a==i){onStart(i);}else{onTiming(i);}var freq=amplTop-amplBot;var randFreq=amplBot+Math.random()*(amplTop-amplBot);setTimeout(f,delay+randFreq)}else{onStop(i);}i+=step;}()};
+    timing({
+        z: 400,
+        delay: 10,
+        onStart: function(i){
+            console.log(i);
+            sb13.move(x, y);
+        },
+        onTiming: function(i){
+            console.log(i);
+            sb13.forward();
+        },
+        onStop: function(i){
+            console.log(i);
+            sb13.node.style.width = sb13.width / 2 + 'px';
+            sb13.node.style.height = sb13.height / 2 + 'px';
+            console.log('wocao');
+        }
+    });
+}
+
 
 
 
@@ -322,7 +485,7 @@ function m10(){
     text: '4、扔垃圾',
     click: m4
 }, {
-    text: '5、碰撞',
+    text: '5、反射',
     click: m5
 }, {
     text: '6、射击（有BUG）',
@@ -339,4 +502,13 @@ function m10(){
 }, {
     text: '10、路径记忆',
     click: m10
+}, {
+    text: '11、经典转向',
+    click: m11
+}, {
+    text: '12、经典转向+反射',
+    click: m12
+}, {
+    text: '13、角度运动',
+    click: m13
 }]);
