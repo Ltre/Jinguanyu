@@ -357,17 +357,30 @@ function m11(){
 function m12(){
     var sb12 = new Jinguanyu('sb12'+Math.random()*10000, 300, 300);
     sb12.className = 'jgy';
+    var div = document.createElement('div');
+    div.style.fontFamily = '微软雅黑';
+    div.style.fontSize = window.screen.height / 10 + 'px';
+    div.style.lineHeight = window.screen.height + 'px';
+    div.style.textAlign = 'center';
+    div.style.position = 'fixed';
+    div.style.top = 0;
+    div.style.left = 0;
+    div.style.zIndex = -1;
+    document.body.appendChild(div);
     //延时器代码取自：https://github.com/Ltre/Ltre.js/blob/master/time/timing.js
-    var timing = function(options){var a=options.a||0,z=options.z||100,step=options.step||+1,amplTop=options.amplTop||+20,amplBot=options.amplBot||-15,delay=options.delay||10;var onStart=options.onStart||function(i){},onTiming=options.onTiming||function(i){},onStop=options.onStop||function(i){};var i=a;!function f(){if(i<z){if(a==i){onStart(i);}else{onTiming(i);}var freq=amplTop-amplBot;var randFreq=amplBot+Math.random()*(amplTop-amplBot);setTimeout(f,delay+randFreq)}else{onStop(i);}i+=step;}()};
+    var timing = function(options){options.a=options.a||0;options.z=options.z||100;options.step=options.step||+1;options.delay=options.delay||10;options.onStart=options.onStart||function(i){};options.onTiming=options.onTiming||function(i){};options.onStop=options.onStop||function(i){};options.i=options.a;!function f(){if(options.i<options.z){if(options.a==options.i){options.onStart(options)}else{options.onTiming(options)}setTimeout(f,options.delay)}else{options.onStop(options)}options.i+=options.step}()};
     timing({
         z: 1000,
         delay: 10,
-        onStart: function(i){
-            console.log(i);
+        onStart: function(options){
+            console.log(options.i);
+            div.innerHTML = '剩余<span style="color:red;">' + options.z + '</span>装逼值';
             sb12.move(2, 2);
         },
-        onTiming: function(i){
-            console.log(i);
+        onTiming: function(options){
+            console.log(options.i);
+            //这里文字居中有BUG
+            div.innerHTML = '<span style="textAlign:center;">剩余<span style="color:red;">' + (options.z - options.i) + '</span>装逼值<span>';
             //边缘检测
             var atLeft = sb12.left <= 0;
             var atRight = sb12.left + sb12.width >= window.screen.width;
@@ -385,18 +398,19 @@ function m12(){
             //计划转向
             var action = ['backward', 'leftward', 'rightward'];
             var maxTrend = 50;
-            if (0 == i % 100) {
+            if (0 == options.i % 100) {
                 sb12[action[Math.floor(Math.random()*action.length)]] (Math.ceil(Math.random()*maxTrend));
             } else {
                 sb12.forward();
             }
         },
-        onStop: function(i){
-            console.log(i);
+        onStop: function(options){
+            console.log(options.i);
+            div.outerHTML = '';
             timing({
                 z: 200,
                 delay: 10,
-                onTiming: function(i){
+                onTiming: function(options){
                     sb12.setWidth(sb12.width + 1);
                     sb12.setHeight(sb12.height + 1);                    
                     sb12.setX(window.screen.width/2 - sb12.width/2);
