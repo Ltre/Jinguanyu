@@ -323,7 +323,7 @@ function m10(){
 //金馆鱼服务11：经典转向
 function m11(){
     var sb11 = new Jinguanyu('sb11'+Math.random()*10000, 300, 300);
-    sb11.className = 'jgy';
+    sb11.node.className = 'jgy';
     //延时器代码取自：https://github.com/Ltre/Ltre.js/blob/master/time/timing.js
     var timing = function(options){var a=options.a||0,z=options.z||100,step=options.step||+1,amplTop=options.amplTop||+20,amplBot=options.amplBot||-15,delay=options.delay||10;var onStart=options.onStart||function(i){},onTiming=options.onTiming||function(i){},onStop=options.onStop||function(i){};var i=a;!function f(){if(i<z){if(a==i){onStart(i);}else{onTiming(i);}var freq=amplTop-amplBot;var randFreq=amplBot+Math.random()*(amplTop-amplBot);setTimeout(f,delay+randFreq)}else{onStop(i);}i+=step;}()};
     timing({
@@ -356,7 +356,7 @@ function m11(){
 //金馆鱼服务12：经典转向+反射
 function m12(){
     var sb12 = new Jinguanyu('sb12'+Math.random()*10000, 300, 300);
-    sb12.className = 'jgy';
+    sb12.node.className = 'jgy';
     var div = document.createElement('div');
     div.style.fontFamily = '微软雅黑';
     div.style.fontSize = window.screen.height / 10 + 'px';
@@ -427,7 +427,7 @@ function m13(){
     var speed = 5;
     var degree = -30;
     var sb13 = new Jinguanyu('sb13'+Math.random()*10000, 300, 100);
-    sb13.className = 'jgy';
+    sb13.node.className = 'jgy';
     var x = speed * Math.sin(Math.PI * degree / 180);
     var y = speed * Math.cos(Math.PI * degree / 180);
     console.log(x, y);
@@ -483,6 +483,10 @@ function m13(){
         mn.innerText = options[i].text || '未命名';
         menus.appendChild(mn);
     }
+    var autoClickOrder = parseInt((location.href.match(/\#.*[!&]m(\d+)/)||[,-1])[1]); //例：http://res.miku.us/res/js/Jinguanyu/2nd/test.html#m12
+    console.log(autoClickOrder);
+    console.log(options[autoClickOrder]);
+    -1 != autoClickOrder && options[options.length - autoClickOrder - 1].click();
 }([{
     text: '0、销毁所有',
     click: m0
