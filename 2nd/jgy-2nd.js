@@ -397,8 +397,9 @@ function m12(){
             }
             //计划转向
             var action = ['backward', 'leftward', 'rightward'];
-            var maxTrend = 50;
-            if (0 == options.i % 100) {
+            var maxTrend = 20;
+            
+            if (0 == options.i % (Math.ceil(Math.random()*(100-10))+10)) {
                 sb12[action[Math.floor(Math.random()*action.length)]] (Math.ceil(Math.random()*maxTrend));
             } else {
                 sb12.forward();
