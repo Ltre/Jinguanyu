@@ -185,9 +185,9 @@ function m5(){
     sb5.move(1, 1);
     setInterval(function(){
         var atLeft = sb5.left <= 0;
-        var atRight = sb5.left + sb5.width >= window.screen.width;
+        var atRight = sb5.left + sb5.width >= document.body.clientWidth;
         var atTop = sb5.top <= 0;
-        var atBottom = sb5.top + sb5.height >= window.screen.height;
+        var atBottom = sb5.top + sb5.height >= document.body.clientHeight;
         console.log(sb5.top, sb5.left, sb5.trendY, sb5.trendX);
         console.log(atTop, atRight, atBottom, atLeft);
         if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
