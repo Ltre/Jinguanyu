@@ -359,8 +359,8 @@ function m12(){
     sb12.node.className = 'jgy';
     var div = document.createElement('div');
     div.style.fontFamily = '微软雅黑';
-    div.style.fontSize = window.screen.height / 10 + 'px';
-    div.style.lineHeight = window.screen.height + 'px';
+    div.style.fontSize = document.body.clientHeight / 10 + 'px';
+    div.style.lineHeight = document.body.clientHeight + 'px';
     div.style.textAlign = 'center';
     div.style.position = 'fixed';
     div.style.top = 0;
@@ -383,9 +383,9 @@ function m12(){
             div.innerHTML = '<span style="textAlign:center;">剩余<span style="color:red;">' + (options.z - options.i) + '</span>装逼值<span>';
             //边缘检测
             var atLeft = sb12.left <= 0;
-            var atRight = sb12.left + sb12.width >= window.screen.width;
+            var atRight = sb12.left + sb12.width >= document.body.clientWidth;
             var atTop = sb12.top <= 0;
-            var atBottom = sb12.top + sb12.height >= window.screen.height;
+            var atBottom = sb12.top + sb12.height >= document.body.clientHeight;
             if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
                 sb12.move(-sb12.trendX, -sb12.trendY);
             } else if (atTop || atBottom) {
@@ -414,11 +414,11 @@ function m12(){
                 onTiming: function(options){
                     sb12.setWidth(sb12.width + 1);
                     sb12.setHeight(sb12.height + 1);                    
-                    sb12.setX(window.screen.width/2 - sb12.width/2);
-                    sb12.setY(window.screen.height/2 - sb12.height/2);
+                    sb12.setX(document.body.clientWidth/2 - sb12.width/2);
+                    sb12.setY(document.body.clientWidth/2 - sb12.height/2);
                 }
             });
-            console.log('wocao', window.screen.width/2 - sb12.width/2, window.screen.height/2 - sb12.height/2);
+            console.log('wocao', document.body.clientWidth/2 - sb12.width/2, document.body.clientHeight/2 - sb12.height/2);
         }
     });
 }
