@@ -415,7 +415,7 @@ function m12(){
                     sb12.setWidth(sb12.width + 1);
                     sb12.setHeight(sb12.height + 1);                    
                     sb12.setX(document.body.clientWidth/2 - sb12.width/2);
-                    sb12.setY(document.body.clientWidth/2 - sb12.height/2);
+                    sb12.setY(document.body.clientHeight/2 - sb12.height/2);
                 }
             });
             console.log('wocao', document.body.clientWidth/2 - sb12.width/2, document.body.clientHeight/2 - sb12.height/2);
