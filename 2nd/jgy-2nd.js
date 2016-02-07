@@ -355,6 +355,12 @@ function m11(){
 }
 //金馆鱼服务12：经典转向+反射
 function m12(){
+    var that = this;
+    if (that.inZuangbi) {
+        alert('有人在装逼，请稍后再装！');
+        return false;
+    }
+    that.inZuangbi = true;
     var sb12 = new Jinguanyu('sb12'+Math.random()*10000, 300, 300);
     sb12.node.className = 'jgy';
     var div = document.createElement('div');
@@ -419,6 +425,7 @@ function m12(){
                 }
             });
             console.log('wocao', document.body.clientWidth/2 - sb12.width/2, document.body.clientHeight/2 - sb12.height/2);
+            that.inZuangbi = false;
         }
     });
 }
