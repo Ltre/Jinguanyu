@@ -14,24 +14,27 @@ window.Jinguanyu = function(id, x, y, src){
     this.top = 0;
     this.trendX = 0;//当前水平移动步长（右正左负）
     this.trendY = 0;//当前竖直移动步长（下正上负）
-    this.trend = 0;//trendX与trendY的合成步长
+    this.trend = 0;//trendX与trendY的合成步长（非负数）
     this.move = function(offsetX, offsetY){
         this.moveX(offsetX);
         this.moveY(offsetY);
         this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
+    //前进
     this.forward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
         var ratio = offset / this.trend;
         this.move(this.trendX * ratio, this.trendY * ratio);
     };
+    //后退
     this.backward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
         var ratio = offset / this.trend;
         this.move(- this.trendX * ratio, - this.trendY * ratio);
     };
+    //左转
     this.leftward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -42,6 +45,7 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(- this.trendX * ratio, this.trendY * ratio);
         }
     };
+    //右转
     this.rightward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -52,27 +56,43 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(this.trendX * ratio, - this.trendY * ratio);
         }
     };
+    //任意角度转（以当前运动方向，逆时针旋转的角度）
+    this.angleward = function(angle, offset){
+        offset = offset || this.trend;
+        if (0 == this.trend) return;
+        var ratio = offset / this.trend;
+        var oldAngle = Math.asin(this.trendX/this.trend);
+        var offsetX = Math.sin(oldAngle + Math.PI*angle/180) * offset;
+        var offsetY = Math.cos(oldAngle + Math.PI*angle/180) * offset;
+        this.move(offsetX, offsetY);
+    };
+    //水平移动
     this.moveX = function(x){
         this.setX(this.left + x);
         this.trendX = x;
     };
+    //纵向移动
     this.moveY = function(y){
         this.setY(this.top + y);
         this.trendY = y;
     };
+    //设定水平坐标
     this.setX = function(x){
         this.left = x;
         this.node.style.left = this.left + 'px';
     };
+    //设定纵向坐标
     this.setY = function(y){
         this.top = y;
         this.node.style.top = this.top + 'px';
     };
+    //设定宽度
     this.setWidth = function(w){
         if (! w) return;
         this.width = w;
         this.node.style.width = w + 'px';
     };
+    //设定高度
     this.setHeight = function(h){
         if (! h) return;
         this.height = h;
@@ -353,8 +373,9 @@ function m11(){
         }
     });
 }
-//金馆鱼服务12：经典转向+反射
+//金馆鱼服务12：复杂转向+反射
 function m12(){
+    var record = [];//记录装逼历程（未做：建议作为Jinguanyu的属性进行控制）
     var that = this;
     if (that.inZuangbi) {
         alert('有人在装逼，请稍后再装！');
@@ -377,7 +398,7 @@ function m12(){
     var timing = function(options){options.a=options.a||0;options.z=options.z||100;options.step=options.step||+1;options.delay=options.delay||10;options.onStart=options.onStart||function(i){};options.onTiming=options.onTiming||function(i){};options.onStop=options.onStop||function(i){};options.i=options.a;!function f(){if(options.i<options.z){if(options.a==options.i){options.onStart(options)}else{options.onTiming(options)}setTimeout(f,options.delay)}else{options.onStop(options)}options.i+=options.step}()};
     timing({
         z: 1000,
-        delay: 10,
+        delay: 15,
         onStart: function(options){
             console.log(options.i);
             div.innerHTML = '剩余<span style="color:red;">' + options.z + '</span>装逼值';
@@ -404,9 +425,10 @@ function m12(){
             //计划转向
             var action = ['backward', 'leftward', 'rightward'];
             var maxTrend = 20;
-            
             if (0 == options.i % (Math.ceil(Math.random()*(100-10))+10)) {
-                sb12[action[Math.floor(Math.random()*action.length)]] (Math.ceil(Math.random()*maxTrend));
+                sb12[action[Math.floor(Math.random()*action.length)]] (Math.ceil(Math.random()*maxTrend));//被某数整除，作经典转向
+            } else if (0 == options.i % 50) {
+                sb12.angleward(-Math.ceil(Math.random()*90), Math.ceil(Math.random()*maxTrend));//被50整除，作随机角度运动，范围90度以内
             } else {
                 sb12.forward();
             }
@@ -429,36 +451,9 @@ function m12(){
         }
     });
 }
-//金馆鱼服务13：角度运动(移动角度有BUG)
+//金馆鱼服务13：读取装逼12的历程
 function m13(){
-    alert('有BUG，还没完成');
-    var speed = 5;
-    var degree = -30;
-    var sb13 = new Jinguanyu('sb13'+Math.random()*10000, 300, 100);
-    sb13.node.className = 'jgy';
-    var x = speed * Math.sin(Math.PI * degree / 180);
-    var y = speed * Math.cos(Math.PI * degree / 180);
-    console.log(x, y);
-    //延时器代码取自：https://github.com/Ltre/Ltre.js/blob/master/time/timing.js
-    var timing = function(options){var a=options.a||0,z=options.z||100,step=options.step||+1,amplTop=options.amplTop||+20,amplBot=options.amplBot||-15,delay=options.delay||10;var onStart=options.onStart||function(i){},onTiming=options.onTiming||function(i){},onStop=options.onStop||function(i){};var i=a;!function f(){if(i<z){if(a==i){onStart(i);}else{onTiming(i);}var freq=amplTop-amplBot;var randFreq=amplBot+Math.random()*(amplTop-amplBot);setTimeout(f,delay+randFreq)}else{onStop(i);}i+=step;}()};
-    timing({
-        z: 400,
-        delay: 10,
-        onStart: function(i){
-            console.log(i);
-            sb13.move(x, y);
-        },
-        onTiming: function(i){
-            console.log(i);
-            sb13.forward();
-        },
-        onStop: function(i){
-            console.log(i);
-            sb13.node.style.width = sb13.width / 2 + 'px';
-            sb13.node.style.height = sb13.height / 2 + 'px';
-            console.log('wocao');
-        }
-    });
+    
 }
 
 
@@ -532,9 +527,9 @@ function m13(){
     text: '11、经典转向',
     click: m11
 }, {
-    text: '12、经典转向+反射',
+    text: '12、复杂转向+反射',
     click: m12
 }, {
-    text: '13、角度运动',
+    text: '13、读取装逼历程',
     click: m13
 }]);
