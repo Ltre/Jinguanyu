@@ -15,6 +15,7 @@ window.Jinguanyu = function(id, x, y, src){
     this.trendX = 0;//当前水平移动步长（右正左负）
     this.trendY = 0;//当前竖直移动步长（下正上负）
     this.trend = 0;//trendX与trendY的合成步长（非负数）
+    //基础移动
     this.move = function(offsetX, offsetY){
         this.moveX(offsetX);
         this.moveY(offsetY);
@@ -375,7 +376,6 @@ function m11(){
 }
 //金馆鱼服务12：复杂转向+反射
 function m12(){
-    var record = [];//记录装逼历程（未做：建议作为Jinguanyu的属性进行控制）
     var that = this;
     if (that.inZuangbi) {
         alert('有人在装逼，请稍后再装！');
@@ -384,6 +384,22 @@ function m12(){
     that.inZuangbi = true;
     var sb12 = new Jinguanyu('sb12'+Math.random()*10000, 300, 300);
     sb12.node.className = 'jgy';
+    //记录装逼历程
+    var record = [];
+    var _hook = sb12.move;
+    sb12.move = function(){
+        record.push([sb12.left, sb12.top]);
+        var div = document.createElement('div');
+        div.style.width = '5px';
+        div.style.height = '5px';
+        div.style.backgroundColor = 'rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')';
+        div.style.position = 'fixed';
+        div.style.left = sb12.left + sb12.width/2 + 'px';
+        div.style.top = sb12.top + sb12.height/2 + 'px';
+        document.body.appendChild(div);
+        _hook.apply(this, arguments);
+    };
+    //状态面板
     var div = document.createElement('div');
     div.style.fontFamily = '微软雅黑';
     div.style.fontSize = document.body.clientHeight / 10 + 'px';
@@ -400,7 +416,7 @@ function m12(){
         z: 1000,
         delay: 15,
         onStart: function(options){
-            console.log(options.i);
+            //console.log(options.i);
             div.innerHTML = '剩余<span style="color:red;">' + options.z + '</span>装逼值';
             sb12.move(2, 2);
         },
@@ -448,6 +464,7 @@ function m12(){
             });
             console.log('wocao', document.body.clientWidth/2 - sb12.width/2, document.body.clientHeight/2 - sb12.height/2);
             that.inZuangbi = false;
+            //console.log(record);//显示装逼记录
         }
     });
 }
