@@ -506,6 +506,7 @@ function m14(){
     div.style.left = 0;
     div.style.zIndex = window.m14MaxZIndex + 1;
     document.body.appendChild(div);
+    //按选定的法器替换
     for (var i in window.m14srcs) {
         var img = document.createElement('img');
         img.src = window.m14srcs[i];
@@ -514,6 +515,7 @@ function m14(){
         img.style.marginTop = document.body.clientHeight/3 + 'px';
         div.appendChild(img);
         document.getElementById(img.id).onclick = function(evt){
+            console.log({img:[evt.currentTarget.nodeName, evt.target.nodeName]});
             var jgys2 = document.getElementsByClassName('jgy');
             for (var j in jgys2) {
                 jgys2[j].src = evt.currentTarget.src;
@@ -521,6 +523,17 @@ function m14(){
             div.outerHTML = '';//选择完成后销毁自身
         };
     }
+    //随机替换法器
+    div.onclick = function(evt){
+        console.log({div:[evt.currentTarget.nodeName, evt.target.nodeName]});
+        if (evt.target == evt.currentTarget) {
+            var jgys3 = document.getElementsByClassName('jgy');
+            for (var j in jgys3) {
+                jgys3[j].src = window.m14srcs[Math.floor(Math.random()*window.m14srcs.length)];
+            }
+        }
+        div.outerHTML = '';
+    };
     return;
 }
 
