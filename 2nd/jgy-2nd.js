@@ -16,7 +16,7 @@ window.Jinguanyu = function(id, x, y, src){
         'http://res.miku.us/res/img/default/2016/01/08/162353-433-hex2d6.gif',
         'http://res.miku.us/res/img/default/2015/11/08/195502-702-hex23e.png',
         'http://res.miku.us/res/img/default/2015/11/08/194339-19-hex1f8.png'
-    ][Math.floor(Math.random()*3)];
+    ][Math.floor(Math.random()*6)];
     this.left = 0;
     this.top = 0;
     this.trendX = 0;//当前水平移动步长（右正左负）
