@@ -133,6 +133,8 @@ window.Jinguanyu = function(id, x, y, src){
         var img = document.createElement('img');
         img.id = id;
         img.src = this.src;
+        img.width = this.width;
+        img.height = this.height;
         document.body.appendChild(img);
         this.node = document.getElementById(id);
     };
@@ -514,6 +516,8 @@ function m14(){
         var img = document.createElement('img');
         img.src = window.m14srcs[i];
         img.id = 'm14-faqi-'+i;
+        img.width = 100;
+        img.height = 100;
         img.style.cursor = 'pointer';
         img.style.marginTop = document.body.clientHeight/3 + 'px';
         div.appendChild(img);
