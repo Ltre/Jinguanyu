@@ -9,7 +9,11 @@ window.Jinguanyu = function(id, x, y, src){
     this.node = null;
     this.width = 100;
     this.height = 100;
-    this.src = src || 'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif';
+    this.src = src || [
+        'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif',
+        'http://res.miku.us/res/img/default/2016/02/11/212745-265-hex302.gif',
+        'http://res.miku.us/res/img/default/2016/02/11/212637-197-hex294.gif'
+    ][Math.floor(Math.random()*3)];
     this.left = 0;
     this.top = 0;
     this.trendX = 0;//当前水平移动步长（右正左负）
@@ -174,7 +178,7 @@ function m3(){
     var sb3i = 0;
     sb3.node.onclick = function(evt){
         console.log({"点击":['sb3' + sb3i++, sb3.left, sb3.top]});
-        var sb33 = new Jinguanyu('sb3' + sb3i++, sb3.left, sb3.top);
+        var sb33 = new Jinguanyu('sb3' + sb3i++ + +Math.random()*100000, sb3.left, sb3.top, evt.currentTarget.src);
         sb33.node.className = 'jgy';
         !function(sb33inner){
             setInterval(function(){
@@ -470,9 +474,55 @@ function m12(){
 }
 //金馆鱼服务13：读取装逼12的历程
 function m13(){
-    
+    alert('没做呢');
 }
-
+//金馆鱼服务14：选好法器
+function m14(){
+    window.m14srcs = window.m14srcs || [];//累积已有法器
+    window.m14MaxZIndex = 1;//获取所有jgy的最大z-index保证“选择面板”位于最上层
+    var jgys = document.getElementsByClassName('jgy');
+    for (var i in jgys) {
+        if (parseInt(i) >= 0) {            
+            var src = jgys[i].src;
+            if (undefined !== src && -1 == window.m14srcs.indexOf(src)) window.m14srcs.push(src);
+            window.m14MaxZIndex = Math.max(jgys[i].style.zIndex, window.m14MaxZIndex);
+        }
+    }
+    if (! window.m14srcs.length) {
+        alert('还木有法器发掘');
+        return;
+    }
+    //选择面板
+    var div = document.createElement('div');
+    div.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    div.style.fontFamily = '微软雅黑';
+    div.style.width = '100%';
+    div.style.height = document.body.clientHeight + 'px';
+    div.style.fontSize = document.body.clientHeight / 10 + 'px';
+    div.style.lineHeight = document.body.clientHeight + 'px';
+    div.style.textAlign = 'center';
+    div.style.position = 'fixed';
+    div.style.top = 0;
+    div.style.left = 0;
+    div.style.zIndex = window.m14MaxZIndex + 1;
+    document.body.appendChild(div);
+    for (var i in window.m14srcs) {
+        var img = document.createElement('img');
+        img.src = window.m14srcs[i];
+        img.id = 'm14-faqi-'+i;
+        img.style.cursor = 'pointer';
+        img.style.marginTop = document.body.clientHeight/3 + 'px';
+        div.appendChild(img);
+        document.getElementById(img.id).onclick = function(evt){
+            var jgys2 = document.getElementsByClassName('jgy');
+            for (var j in jgys2) {
+                jgys2[j].src = evt.currentTarget.src;
+            }
+            div.outerHTML = '';//选择完成后销毁自身
+        };
+    }
+    return;
+}
 
 
 
@@ -549,4 +599,7 @@ function m13(){
 }, {
     text: '13、读取装逼历程',
     click: m13
+}, {
+    text: '14、选好法器',
+    click: m14
 }]);
