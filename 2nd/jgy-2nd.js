@@ -12,7 +12,10 @@ window.Jinguanyu = function(id, x, y, src){
     this.src = src || [
         'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif',
         'http://res.miku.us/res/img/default/2016/02/11/212745-265-hex302.gif',
-        'http://res.miku.us/res/img/default/2016/02/11/212637-197-hex294.gif'
+        'http://res.miku.us/res/img/default/2016/02/11/212637-197-hex294.gif',
+        'http://res.miku.us/res/img/default/2016/01/08/162353-433-hex2d6.gif',
+        'http://res.miku.us/res/img/default/2015/11/08/195502-702-hex23e.png',
+        'http://res.miku.us/res/img/default/2015/11/08/194339-19-hex1f8.png'
     ][Math.floor(Math.random()*3)];
     this.left = 0;
     this.top = 0;
