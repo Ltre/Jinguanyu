@@ -2,6 +2,10 @@
  * 金馆鱼二代基础SDK
  * @author Ltre Oreki<ltrele@gmail.com>
  * @since 2015-10-30
+ * @params string id 元素ID
+ * @params int x 在fixed布局下的left大小
+ * @params int y 在fixed布局下的top大小
+ * @params string|mixed src 元素来源。当设置为字符串为，视为图片地址；当设置为DOM Element时，将以实际元素为准
  */
 window.Jinguanyu = function(id, x, y, src){
     var _this = this;
@@ -127,24 +131,25 @@ window.Jinguanyu = function(id, x, y, src){
         };
     };
     this.create = function(id, x, y){
-        this.id = id;
+        this.id = id || + new Date;
         this.left = x || 0;
         this.top = y || 0;
-        var img = document.createElement('img');
-        img.id = id;
-        img.src = this.src;
-        img.width = this.width;
-        img.height = this.height;
-        document.body.appendChild(img);
-        this.node = document.getElementById(id);
+        if ('string' == typeof this.src) {
+            var img = document.createElement('img');
+            img.id = this.id;
+            img.src = this.src;
+            img.width = this.width;
+            img.height = this.height;
+            document.body.appendChild(img);
+        } else {
+            ("" === this.src.id) ? this.src.setAttribute('id', this.id) : (this.id = this.src.id || this.id);
+        }
+        this.node = document.getElementById(this.id);
     };
     this.create(id, x, y);
     this.initPosition();
     this.bind();
 };
-
-
-
 
 
 
@@ -543,6 +548,73 @@ function m14(){
     };
     return;
 }
+//金馆鱼服务16：人身劫持
+function m16(){
+    var sb16 = null;//新来的
+    var lyt = null;//老油条
+    var timing = function(opt){opt.a=opt.a||0;opt.z=opt.z||100;opt.step=opt.step||+1;opt.delay=opt.delay||10;opt.amplTop=opt.amplTop||+0;opt.amplBot=opt.amplBot||-0;opt.onStart=opt.onStart||function(i){};opt.onTiming=opt.onTiming||function(i){};opt.onStop=opt.onStop||function(i){};opt.i=opt.a;var innerThat=this;this.ctrl={goPause:false,goStop:false,goFirst:false,goLast:false,goPrev:false,goNext:false,goTo:false};~function f(){if(opt.i<=opt.z){var randAmpl=opt.amplBot+Math.random()*(opt.amplTop-opt.amplBot);setTimeout(f,opt.delay+randAmpl);if(innerThat.ctrl.goPause){return}if(innerThat.ctrl.goStop){opt.i=opt.z+opt.step;return}if(innerThat.ctrl.goFirst){innerThat.ctrl.goFirst=false;opt.i=opt.a;return}if(innerThat.ctrl.goLast){innerThat.ctrl.goLast=false;opt.i=opt.z;return}if(innerThat.ctrl.goPrev){innerThat.ctrl.goPrev=false;opt.i-=opt.step;return}if(innerThat.ctrl.goNext){innerThat.ctrl.goNext=false;opt.i+=opt.step;return}if('number'==typeof innerThat.ctrl.goTo&&opt.a<=innerThat.ctrl.goTo&&innerThat.ctrl.goTo<=opt.z){opt.i=innerThat.ctrl.goTo;innerThat.ctrl.goTo=false;return}opt.a==opt.i&&opt.onStart(opt);opt.onTiming(opt);opt.z==opt.i&&opt.onStop(opt)}opt.i+=opt.step}()};
+    timing({
+        a: 1,
+        z: 10000,
+        delay: 50,
+        onStart: function(){            
+            //劫持新来的
+            var div = document.createElement('div');
+            div.style.width = '50px';
+            div.style.height = '50px';
+            div.style.borderRadius = '50%';
+            document.body.appendChild(div);
+            sb16 = new Jinguanyu('sb16'+Math.random()*10000, 200, 200, div);
+            sb16.node.className += ' jgy ';
+            sb16.move(1, 1);
+            //劫持老油条
+            lyt = new Jinguanyu('jgy-menus', 300, 300, document.getElementById('jgy-menus'));
+            lyt.node.className += ' jgy ';
+            lyt.move(-100, -100);
+        },
+        onTiming: function(opt){
+            sb16.node.style.backgroundColor = 'rgba('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+Math.random()+')';
+            sb16.angleward(Math.random()*360, Math.random()*20);
+            lyt.angleward(Math.random()*360, Math.random()*20);
+        }
+    });
+}
+//金馆鱼服务17：殊途同归
+function m17(){
+    var start = [100, 100], end = [900, 500];
+    var sb17 = new Jinguanyu('sb17'+Math.random()*10000, start[0], start[1]);
+    var sb17start = new Jinguanyu('sb17start'+Math.random()*10000, start[0], start[1]);
+    var sb17end = new Jinguanyu('sb17end'+Math.random()*10000, end[0], end[1]);
+    sb17.node.className = 'jgy';
+    sb17start.node.className = 'jgy';
+    sb17end.node.className = 'jgy'; 
+    alert('未完成');
+}
+//金馆鱼服务18：世界大乱
+function m18(){
+    var collect = [];
+    var timing = function(opt){opt.a=opt.a||0;opt.z=opt.z||100;opt.step=opt.step||+1;opt.delay=opt.delay||10;opt.amplTop=opt.amplTop||+0;opt.amplBot=opt.amplBot||-0;opt.onStart=opt.onStart||function(i){};opt.onTiming=opt.onTiming||function(i){};opt.onStop=opt.onStop||function(i){};opt.i=opt.a;var innerThat=this;this.ctrl={goPause:false,goStop:false,goFirst:false,goLast:false,goPrev:false,goNext:false,goTo:false};~function f(){if(opt.i<=opt.z){var randAmpl=opt.amplBot+Math.random()*(opt.amplTop-opt.amplBot);setTimeout(f,opt.delay+randAmpl);if(innerThat.ctrl.goPause){return}if(innerThat.ctrl.goStop){opt.i=opt.z+opt.step;return}if(innerThat.ctrl.goFirst){innerThat.ctrl.goFirst=false;opt.i=opt.a;return}if(innerThat.ctrl.goLast){innerThat.ctrl.goLast=false;opt.i=opt.z;return}if(innerThat.ctrl.goPrev){innerThat.ctrl.goPrev=false;opt.i-=opt.step;return}if(innerThat.ctrl.goNext){innerThat.ctrl.goNext=false;opt.i+=opt.step;return}if('number'==typeof innerThat.ctrl.goTo&&opt.a<=innerThat.ctrl.goTo&&innerThat.ctrl.goTo<=opt.z){opt.i=innerThat.ctrl.goTo;innerThat.ctrl.goTo=false;return}opt.a==opt.i&&opt.onStart(opt);opt.onTiming(opt);opt.z==opt.i&&opt.onStop(opt)}opt.i+=opt.step}()};
+    timing({
+        a: 1,
+        z: 10000,
+        delay: 50,
+        onStart: function(opt){
+            Array.prototype.forEach.call(document.querySelectorAll('*'), function(e){
+                if (-1 != ['html', 'head', 'meta', 'title', 'link', 'script', 'style', 'body'].indexOf(e.tagName.toLowerCase())) return;
+                var j = new Jinguanyu('', Math.random()*window.screen.width, Math.random()*window.screen.height, e);
+                var j = new Jinguanyu('', 500, 350, e);
+                j.node.className += ' jgy ';
+                j.move(20,20);
+                collect.push(j);                
+            });
+        },
+        onTiming: function(opt){
+            collect.forEach(function(e){
+                e.angleward(Math.random()*360, Math.random()*200);
+            });
+        }
+    });
+}
 
 
 
@@ -622,4 +694,13 @@ function m14(){
 }, {
     text: '14、选好法器',
     click: m14
+}, {
+    text: '16、人身劫持',
+    click: m16
+}, {
+    text: '17、殊途同归',
+    click: m17
+}, {
+    text: '18、世界大乱',
+    click: m18
 }]);
