@@ -541,7 +541,30 @@ function m14(){
         }
         div.outerHTML = '';
     };
-    return;
+}
+//金馆鱼服务15：圈地运动
+function m15(){
+    var commonDiv = document.createElement('div');
+    commonDiv.style.width = '100%';
+    commonDiv.style.height = document.body.clientHeight + 'px';
+    document.body.appendChild(commonDiv);
+    window.m15tmp = {};
+    commonDiv.ondragstart = function(evt){
+        alert();
+        window.m15tmp.last = {x:evt.clientX, y:evt.clientY};
+    };
+    commonDiv.ondragend = function(evt){
+        window.m15tmp.end = {x:evt.clientX, y:evt.clientY};
+        var last = window.m15tmp.last;
+        var left = last.x, top = last.y;
+        var width = evt.clientX - last.x, height = evt.clientY - last.y;
+        var div = document.createElement('div');
+        div.id = 'rect-' + left + '-' + top + '-' + width + '-' + height;
+        div.style.position = 'fixed';
+        div.style.backgroundColor = 'rgba('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.random()+')';
+        commonDiv.ondragstart = commonDiv.ondragend = function(){};//销毁绘制事件
+        commonDiv.outerHTML = '';//销毁临时拖拽板
+    };
 }
 
 
@@ -622,4 +645,7 @@ function m14(){
 }, {
     text: '14、选好法器',
     click: m14
+}, {
+    text: '15、圈地运动',
+    click: m15
 }]);
