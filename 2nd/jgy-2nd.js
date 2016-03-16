@@ -26,27 +26,45 @@ window.Jinguanyu = function(id, x, y, src){
     this.trendX = 0;//当前水平移动步长（右正左负）
     this.trendY = 0;//当前竖直移动步长（下正上负）
     this.trend = 0;//trendX与trendY的合成步长（非负数）
-    //基础移动
-    this.move = function(offsetX, offsetY){
-        this.moveX(offsetX);
-        this.moveY(offsetY);
-        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
+    //【待测试】方盒碰撞检测支持，每次发生动作时都需调用（内核五级API）
+    this.promiseBoxLimit = function(left1, top1, left2, top2, callback){
+        left1 = left1 || 0;
+        top1 = top1 || 0;
+        left2 = left2 || document.body.clientWidth;
+        top2 = top2 || document.body.clientHeight;
+        var atLeft = this.left <= left1;
+        var atRight = this.left + this.width >= left2;
+        var atTop = this.top <= top1;
+        var atBottom = this.top + this.height >= top2;
+        if ('function' == typeof callback) {            
+            callback(this, {atLeft:atLeft, atRight:atRight, atTop:atTop, atBottom:atBottom}, {top1:top1, left1:left1, top2:top2, left2:left2});
+        } else {
+            if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
+                this.move(-this.trendX, -this.trendY);
+            } else if (atTop || atBottom) {
+                this.move(this.trendX, -this.trendY);
+            } else if (atLeft || atRight) {
+                this.move(-this.trendX, this.trendY);
+            } else {
+                this.move(this.trendX, this.trendY);
+            }
+        }
     };
-    //前进
+    //前进（内核四级API）
     this.forward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
         var ratio = offset / this.trend;
         this.move(this.trendX * ratio, this.trendY * ratio);
     };
-    //后退
+    //后退（内核四级API）
     this.backward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
         var ratio = offset / this.trend;
         this.move(- this.trendX * ratio, - this.trendY * ratio);
     };
-    //左转
+    //左转（内核四级API）
     this.leftward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -57,7 +75,7 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(- this.trendX * ratio, this.trendY * ratio);
         }
     };
-    //右转
+    //右转（内核四级API）
     this.rightward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -68,7 +86,7 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(this.trendX * ratio, - this.trendY * ratio);
         }
     };
-    //任意角度转（以当前运动方向，逆时针旋转的角度）
+    //任意角度转（以当前运动方向，逆时针旋转的角度）（内核四级API）
     this.angleward = function(angle, offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -78,22 +96,28 @@ window.Jinguanyu = function(id, x, y, src){
         var offsetY = Math.cos(oldAngle + Math.PI*angle/180) * offset;
         this.move(offsetX, offsetY);
     };
-    //水平移动
+    //基础移动（内核三级API）
+    this.move = function(offsetX, offsetY){
+        this.moveX(offsetX);
+        this.moveY(offsetY);
+        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
+    };
+    //水平移动（内核二级API）
     this.moveX = function(x){
         this.setX(this.left + x);
         this.trendX = x;
     };
-    //纵向移动
+    //纵向移动（内核二级API）
     this.moveY = function(y){
         this.setY(this.top + y);
         this.trendY = y;
     };
-    //设定水平坐标
+    //设定水平坐标（内核一级API）
     this.setX = function(x){
         this.left = x;
         this.node.style.left = this.left + 'px';
     };
-    //设定纵向坐标
+    //设定纵向坐标（内核一级API）
     this.setY = function(y){
         this.top = y;
         this.node.style.top = this.top + 'px';
@@ -131,7 +155,7 @@ window.Jinguanyu = function(id, x, y, src){
         };
     };
     this.create = function(id, x, y){
-        this.id = id || + new Date;
+        this.id = id || parseInt(+ new Date + Math.random()*1000000);
         this.left = x || 0;
         this.top = y || 0;
         if ('string' == typeof this.src) {
@@ -621,19 +645,21 @@ function m18(){
         a: 1,
         z: 10000,
         delay: 50,
+        amplTop: 60,
+        amplBot: 15,
         onStart: function(opt){
             Array.prototype.forEach.call(document.querySelectorAll('*'), function(e){
                 if (-1 != ['html', 'head', 'meta', 'title', 'link', 'script', 'style', 'body'].indexOf(e.tagName.toLowerCase())) return;
                 var j = new Jinguanyu('', Math.random()*window.screen.width, Math.random()*window.screen.height, e);
-                var j = new Jinguanyu('', 500, 350, e);
                 j.node.className += ' jgy ';
-                j.move(20,20);
-                collect.push(j);                
+                j.move(50*Math.random(),50*Math.random());
+                collect.push(j);
             });
         },
         onTiming: function(opt){
             collect.forEach(function(e){
-                e.angleward(Math.random()*360, Math.random()*200);
+                e.angleward(Math.random()*360, Math.random()*50);
+                e.promiseBoxLimit();//时刻检测方盒碰撞
             });
         }
     });
