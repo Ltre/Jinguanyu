@@ -650,7 +650,7 @@ function m18(){
         onStart: function(opt){
             Array.prototype.forEach.call(document.querySelectorAll('*'), function(e){
                 if (-1 != ['html', 'head', 'meta', 'title', 'link', 'script', 'style', 'body'].indexOf(e.tagName.toLowerCase())) return;
-                var j = new Jinguanyu('', Math.random()*window.screen.width, Math.random()*window.screen.height, e);
+                var j = new Jinguanyu('', Math.random()*document.body.clientWidth, Math.random()*document.body.clientHeight, e);
                 j.node.className += ' jgy ';
                 j.move(50*Math.random(),50*Math.random());
                 collect.push(j);
