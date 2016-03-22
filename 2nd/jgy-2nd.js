@@ -634,7 +634,7 @@ function m17(){
     var sb17end = new Jinguanyu('sb17end'+Math.random()*10000, end[0], end[1]);
     sb17.node.className = 'jgy';
     sb17start.node.className = 'jgy';
-    sb17end.node.className = 'jgy'; 
+    sb17end.node.className = 'jgy';
     alert('未完成');
 }
 //金馆鱼服务18：世界大乱
