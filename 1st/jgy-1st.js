@@ -1,11 +1,11 @@
 undefined != window.Anime || (Anime = {
    'widgets' : [],
    'num' : 0,
-   'animemap' : {} //´æÈë¿Ø¼şµÄid=>interval_idÓ³Éä
+   'animemap' : {} //å­˜å…¥æ§ä»¶çš„id=>interval_idæ˜ å°„
 });
 
 /**
- * ½ğ¹İÓãÒ»´ú(°æÈ¨¹éÕÛÄ¾ËùÓĞ)
+ * é‡‘é¦†é±¼ä¸€ä»£(ç‰ˆæƒå½’æŠ˜æœ¨æ‰€æœ‰)
  * @author Ltre
  * @since 2015-1-6
  * @link http://miku.us
@@ -24,7 +24,7 @@ Anime.Jinguanyu = function(w_start, h_start){
     var widget = null;
     var widget_id = '';
     
-    //´´½¨DOM(Ë½ÓĞ)
+    //åˆ›å»ºDOM(ç§æœ‰)
     function create(w_start, h_start){
         w_start && (wstart = w_start);
         h_start && (hstart = h_start);
@@ -35,8 +35,8 @@ Anime.Jinguanyu = function(w_start, h_start){
         widget = document.getElementById(widget_id);
     }
     
-    //¿ªÊ¼/½áÊø¶¯»­(¹«ÓĞ)
-    this.anime = function(isStart/*1¿ªÊ¼0½áÊø*/){
+    //å¼€å§‹/ç»“æŸåŠ¨ç”»(å…¬æœ‰)
+    this.anime = function(isStart/*1å¼€å§‹0ç»“æŸ*/){
         var itvid = Anime.animemap[widget_id];
         if (undefined == itvid && isStart) {
             var itvid = setInterval(function(){
@@ -58,10 +58,10 @@ Anime.Jinguanyu = function(w_start, h_start){
         }
     };
     
-    //×¢ÈëÍÏ¶¯Ğ§¹û,ÔİÊ±²»ÄÜÊµÏÖ°´×¡£¬Ö»ÄÜµ¥»÷ºóÍÏ¶¯(¹«ÓĞ)
+    //æ³¨å…¥æ‹–åŠ¨æ•ˆæœ,æš‚æ—¶ä¸èƒ½å®ç°æŒ‰ä½ï¼Œåªèƒ½å•å‡»åæ‹–åŠ¨(å…¬æœ‰)
     function injectDrag(){
         var o = document.getElementById(widget_id);
-        var moveItvid, x, y, is_clicked = false;//¼äĞªid¡¢x¡¢y¡¢ÊÇ·ñ°´ÏÂ
+        var moveItvid, x, y, is_clicked = false;//é—´æ­‡idã€xã€yã€æ˜¯å¦æŒ‰ä¸‹
         var img_w = 100, img_h = 100;
         o.onclick = function(){
             if (! is_clicked) {
@@ -77,7 +77,7 @@ Anime.Jinguanyu = function(w_start, h_start){
         };
         o.onmousemove = function(e){
             console.log(['onmousemove', is_clicked]);
-            if (! is_clicked) return;//Ã»µã»÷¹ı¡¢»òÊó±êÅöµ½Î´°ó¶¨ÍÏ¶¯µÄ½ğ¹İÓãÊ±£¬²»ÓèÖ´ĞĞ¶¯×÷
+            if (! is_clicked) return;//æ²¡ç‚¹å‡»è¿‡ã€æˆ–é¼ æ ‡ç¢°åˆ°æœªç»‘å®šæ‹–åŠ¨çš„é‡‘é¦†é±¼æ—¶ï¼Œä¸äºˆæ‰§è¡ŒåŠ¨ä½œ
             e = e || window.event;
             console.log(e);
             console.log([e.x,e.y]);
@@ -94,9 +94,9 @@ Anime.Jinguanyu = function(w_start, h_start){
     
 };
 
-//ÊÔÔËĞĞ
-//CONSOLEÔ¤ÀÀ£ºvar doc = document; doc.getElementsByTagName('body')[0].style.zIndex = 0; var je = doc.createElement("script"); je.setAttribute("type", "text/javascript"); je.setAttribute("src", 'http://miku.us/res/lib/anime.js'); var heads = doc.getElementsByTagName("head"); if(heads.length) heads[0].appendChild(je);  else  doc.documentElement.appendChild(je);
-//CONSOLEÔ¤ÀÀ£ºvar doc = document; doc.getElementsByTagName('body')[0].style.zIndex = 0; var je = doc.createElement("script"); je.setAttribute("type", "text/javascript"); je.setAttribute("src", 'http://danmu.me/pub/danmu/res/lib/anime.js'); var heads = doc.getElementsByTagName("head"); if(heads.length) heads[0].appendChild(je);  else  doc.documentElement.appendChild(je);
+//è¯•è¿è¡Œ
+//CONSOLEé¢„è§ˆï¼švar doc = document; doc.getElementsByTagName('body')[0].style.zIndex = 0; var je = doc.createElement("script"); je.setAttribute("type", "text/javascript"); je.setAttribute("src", 'http://miku.us/res/lib/anime.js'); var heads = doc.getElementsByTagName("head"); if(heads.length) heads[0].appendChild(je);  else  doc.documentElement.appendChild(je);
+//CONSOLEé¢„è§ˆï¼švar doc = document; doc.getElementsByTagName('body')[0].style.zIndex = 0; var je = doc.createElement("script"); je.setAttribute("type", "text/javascript"); je.setAttribute("src", 'http://danmu.me/pub/danmu/res/lib/anime.js'); var heads = doc.getElementsByTagName("head"); if(heads.length) heads[0].appendChild(je);  else  doc.documentElement.appendChild(je);
 Anime.Jinguanyu.test = function(){
     for(var i = 0; i < 50; i++) {
         var wstart = Math.random() * (window.screen.width - 100) + 50;
