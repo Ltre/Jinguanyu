@@ -13,7 +13,7 @@ window.Jinguanyu = function(id, x, y, src){
     this.node = null;
     this.width = 100;
     this.height = 100;
-    this.src = src || [
+    var _tmpImgs; this.src = src || (_tmpImgs=[
         'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif',
         'http://res.miku.us/res/img/default/2016/02/11/212745-265-hex302.gif',
         'http://res.miku.us/res/img/default/2016/02/11/212637-197-hex294.gif',
@@ -21,7 +21,7 @@ window.Jinguanyu = function(id, x, y, src){
         'http://res.miku.us/res/img/default/2015/11/08/195502-702-hex23e.png',
         'http://res.miku.us/res/img/default/2015/11/08/194339-19-hex1f8.png',
         'http://res.miku.us/res/img/default/2016/04/02/140946-386-hex3a9.gif'
-    ][Math.floor(Math.random()*6)];
+    ])[Math.floor(Math.random()*_tmpImgs.length)];
     this.left = 0;
     this.top = 0;
     this.trendX = 0;//当前水平移动步长（右正左负）
