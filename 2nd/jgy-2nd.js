@@ -744,7 +744,7 @@ function m19(){
     var bodyLoadHook = document.body.onkeyup || function(){};
     var keyStore = [];
     var domain = location.hostname;
-    var ckKey = 'jgymn_close';
+    var ckKey = 'jgymn_open';
     var getCookie = function(ckKey){
         return decodeURI((document.cookie.match(new RegExp("(^| )" + ckKey + "=([^;]*)(;|$)"))||[,,''])[2]);
     };
