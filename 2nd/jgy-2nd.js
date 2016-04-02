@@ -428,14 +428,16 @@ function m12(){
     var _hook = sb12.move;
     sb12.move = function(){
         record.push([sb12.left, sb12.top]);
-        var div = document.createElement('div');
-        div.style.width = '5px';
-        div.style.height = '5px';
-        div.style.backgroundColor = 'rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')';
-        div.style.position = 'fixed';
-        div.style.left = sb12.left + sb12.width/2 + 'px';
-        div.style.top = sb12.top + sb12.height/2 + 'px';
-        document.body.appendChild(div);
+        if (false) {//轨迹太卡，暂时禁用
+            var div = document.createElement('div');
+            div.style.width = '5px';
+            div.style.height = '5px';
+            div.style.backgroundColor = 'rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')';
+            div.style.position = 'fixed';
+            div.style.left = sb12.left + sb12.width/2 + 'px';
+            div.style.top = sb12.top + sb12.height/2 + 'px';
+            document.body.appendChild(div);            
+        }
         _hook.apply(this, arguments);
     };
     //状态面板
@@ -499,6 +501,10 @@ function m12(){
                     sb12.setHeight(sb12.height + 1);                    
                     sb12.setX(document.body.clientWidth/2 - sb12.width/2);
                     sb12.setY(document.body.clientHeight/2 - sb12.height/2);
+                },
+                onStop: function(options){//最后关头销毁自身，并进行核裂变
+                    sb12.node.outerHTML = '';
+                    m2();
                 }
             });
             console.log('wocao', document.body.clientWidth/2 - sb12.width/2, document.body.clientHeight/2 - sb12.height/2);
@@ -682,12 +688,12 @@ function m19(){
             var directGapX = parseInt(o.style.left.replace('px', '')) - sb19.left;
             var nearY = Math.abs(directGapY) < 200;
             var nearX = Math.abs(directGapX) < 200;
-            if (nearY && nearX) {//吸引
+            if (nearY && nearX) {//靠近时
                 o.wocaoY || (o.wocaoY = directGapY>0?1:-1);
                 o.wocaoX || (o.wocaoX = directGapX>0?1:-1);
                 o.style.top = sb19.top + 150 * o.wocaoY + 'px';
                 o.style.left = sb19.left + 150 * o.wocaoX + 'px';
-            } else {//脱离
+            } else {//脱离时
                 delete o.wocaoY;
                 delete o.wocaoX;
             }
