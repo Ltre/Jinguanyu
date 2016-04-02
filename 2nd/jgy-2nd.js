@@ -665,6 +665,35 @@ function m18(){
         }
     });
 }
+//金馆鱼服务19：磁力中毒
+function m19(){
+    var sb19 = new Jinguanyu('sb19'+Math.random()*10000, Math.random()*document.body.clientWidth, Math.random()*document.body.clientHeight);
+    sb19.node.className = 'jgy jgy-sb19';
+    var stl = sb19.node.style;
+    stl.border = 'dotted green 34px';
+    var list = document.getElementsByClassName('jgy');
+    console.log(list);
+    setInterval(function(){
+        for (var i in list) {
+            var o = list[i];
+            if (typeof o != 'object') continue;
+            if (-1 != o.className.split(' ').indexOf('jgy-sb19')) continue;
+            var directGapY = parseInt(o.style.top.replace('px', '')) - sb19.top;
+            var directGapX = parseInt(o.style.left.replace('px', '')) - sb19.left;
+            var nearY = Math.abs(directGapY) < 200;
+            var nearX = Math.abs(directGapX) < 200;
+            if (nearY && nearX) {//吸引
+                o.wocaoY || (o.wocaoY = directGapY>0?1:-1);
+                o.wocaoX || (o.wocaoX = directGapX>0?1:-1);
+                o.style.top = sb19.top + 150 * o.wocaoY + 'px';
+                o.style.left = sb19.left + 150 * o.wocaoX + 'px';
+            } else {//脱离
+                delete o.wocaoY;
+                delete o.wocaoX;
+            }
+        }
+    }, 10);
+}
 
 
 
@@ -756,4 +785,7 @@ function m18(){
 }, {
     text: '18、世界大乱',
     click: m18
+}, {
+    text: '19、磁力中毒',
+    click: m19
 }]);
