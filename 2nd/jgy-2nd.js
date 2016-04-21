@@ -709,7 +709,35 @@ function m19(){
         }
     }, 10);
 }
-
+//金馆鱼服务20：遥控器
+function m20(){
+	var loadJs = function(url){
+		var head = document.getElementsByTagName("head")[0] || document.documentElement;  
+	    var script = document.createElement("script");   
+	    head.insertBefore( script, head.firstChild );   
+	    script.setAttribute("type", "text/javascript");  
+	    script.setAttribute("src", url);
+	};
+	loadJs("https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js");
+	loadJs("https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js");
+	loadJs("https://cdn.bootcss.com/socket.io/1.3.5/socket.io.min.js");
+	
+	setTimeout(function(){
+		var qrId = (location.href.match(/\#.*[&]showControlView\=([^&]+)/)||[,-1])[1];
+		if (-1 === qrId) { //进入生成遥控器模式
+			
+			var qrId = 'm20-qrcode-'+(+new Date);
+			$('body').append('<div id="'+qrId+'" style="position: fixed; z-index: 20; top: 50px; left: 0px; display: none;"></div>');
+			$('#'+qrId).css('display','').qrcode({width:300,height:300,text:'http://res.miku.us/#!m20&showControlView='+qrId});
+			console.log('http://res.miku.us/#!m20&showControlView='+qrId);
+			
+		} else { //进入使用遥控器模式
+			
+			alert('fuck');
+			
+		}
+	}, 500);
+}
 
 
 //实验控制菜单
@@ -879,4 +907,7 @@ function m19(){
 }, {
     text: '19、磁力中毒',
     click: m19
+}, {
+	text: '20、遥控器',
+	click: m20
 }]);
