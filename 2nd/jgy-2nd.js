@@ -721,10 +721,10 @@ function m20(){
     loadJs("https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js");
     loadJs("https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js");
     loadJs("https://cdn.bootcss.com/socket.io/1.3.5/socket.io.min.js");
-	var timing = function(opt){opt.a=opt.a||0;opt.z=opt.z||100;opt.step=opt.step||+1;opt.delay=opt.delay||10;opt.amplTop=opt.amplTop||+0;opt.amplBot=opt.amplBot||-0;opt.onStart=opt.onStart||function(i){};opt.onTiming=opt.onTiming||function(i){};opt.onStop=opt.onStop||function(i){};opt.i=opt.a;var innerThat=this;this.ctrl={goPause:false,goStop:false,goFirst:false,goLast:false,goPrev:false,goNext:false,goTo:false};~function f(){if(opt.i<=opt.z){var randAmpl=opt.amplBot+Math.random()*(opt.amplTop-opt.amplBot);setTimeout(f,opt.delay+randAmpl);if(innerThat.ctrl.goPause){return}if(innerThat.ctrl.goStop){opt.i=opt.z+opt.step;return}if(innerThat.ctrl.goFirst){innerThat.ctrl.goFirst=false;opt.i=opt.a;return}if(innerThat.ctrl.goLast){innerThat.ctrl.goLast=false;opt.i=opt.z;return}if(innerThat.ctrl.goPrev){innerThat.ctrl.goPrev=false;opt.i-=opt.step;return}if(innerThat.ctrl.goNext){innerThat.ctrl.goNext=false;opt.i+=opt.step;return}if('number'==typeof innerThat.ctrl.goTo&&opt.a<=innerThat.ctrl.goTo&&innerThat.ctrl.goTo<=opt.z){opt.i=innerThat.ctrl.goTo;innerThat.ctrl.goTo=false;return}opt.a==opt.i&&opt.onStart(opt);opt.onTiming(opt);opt.z==opt.i&&opt.onStop(opt)}opt.i+=opt.step}()};
+    var timing = function(opt){opt.a=opt.a||0;opt.z=opt.z||100;opt.step=opt.step||+1;opt.delay=opt.delay||10;opt.amplTop=opt.amplTop||+0;opt.amplBot=opt.amplBot||-0;opt.onStart=opt.onStart||function(i){};opt.onTiming=opt.onTiming||function(i){};opt.onStop=opt.onStop||function(i){};opt.i=opt.a;var innerThat=this;this.ctrl={goPause:false,goStop:false,goFirst:false,goLast:false,goPrev:false,goNext:false,goTo:false};~function f(){if(opt.i<=opt.z){var randAmpl=opt.amplBot+Math.random()*(opt.amplTop-opt.amplBot);setTimeout(f,opt.delay+randAmpl);if(innerThat.ctrl.goPause){return}if(innerThat.ctrl.goStop){opt.i=opt.z+opt.step;return}if(innerThat.ctrl.goFirst){innerThat.ctrl.goFirst=false;opt.i=opt.a;return}if(innerThat.ctrl.goLast){innerThat.ctrl.goLast=false;opt.i=opt.z;return}if(innerThat.ctrl.goPrev){innerThat.ctrl.goPrev=false;opt.i-=opt.step;return}if(innerThat.ctrl.goNext){innerThat.ctrl.goNext=false;opt.i+=opt.step;return}if('number'==typeof innerThat.ctrl.goTo&&opt.a<=innerThat.ctrl.goTo&&innerThat.ctrl.goTo<=opt.z){opt.i=innerThat.ctrl.goTo;innerThat.ctrl.goTo=false;return}opt.a==opt.i&&opt.onStart(opt);opt.onTiming(opt);opt.z==opt.i&&opt.onStop(opt)}opt.i+=opt.step}()};
     
     setTimeout(function(){
-	    var socket = io.connect('http://io.yooo.moe:3000');
+        var socket = io.connect('http://io.yooo.moe:3000');
         var qrId = (location.href.match(/\#.*[&]showControlView\=([^&]+)/)||[,-1])[1];
         if (-1 === qrId) { //出现二维码，进入被控模式
             
@@ -732,38 +732,38 @@ function m20(){
             $('body').append('<div id="'+qrId+'" style="position: fixed; z-index: 20; top: 50px; left: 0px; display: none;"></div>');
             $('#'+qrId).css('display','').qrcode({width:300,height:300,text:'http://res.miku.us/#!m20&showControlView='+qrId});
             console.log('http://res.miku.us/#!m20&showControlView='+qrId);
-			var sb20 = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
-    		sb20.node.className = 'jgy';
-		    timing({
-		        a: 1,
-		        z: 10000000,
-		        delay: 5,
-		        onStart: function(opt){
-		            sb20.move(1, 1);
-		        },
-		        onTiming: function(opt){
-		        	sb20.forward();
-	                sb20.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
-		        }
-		    });
+            var sb20 = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
+            sb20.node.className = 'jgy';
+            timing({
+                a: 1,
+                z: 10000000,
+                delay: 5,
+                onStart: function(opt){
+                    sb20.move(1, 1);
+                },
+                onTiming: function(opt){
+                    sb20.forward();
+                    sb20.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
+                }
+            });
             socket.emit('jgy/regCmd', qrId);
             socket.on('jgy/acceptCmd', function(rToken, type, value){
-		        if (qrId != rToken) return;
-		        switch (type) {
-					case 'up':
-						sb20.trendY++;
-						break;
-					case 'down':
-						sb20.trendY--;
-						break;
-					case 'left':
-						sb20.trendX--;
-						break;
-					case 'right':
-						sb20.trendX++;
-						break;	
-		        }
-		    });
+                if (qrId != rToken) return;
+                switch (type) {
+                    case 'up':
+                        sb20.trendY++;
+                        break;
+                    case 'down':
+                        sb20.trendY--;
+                        break;
+                    case 'left':
+                        sb20.trendX--;
+                        break;
+                    case 'right':
+                        sb20.trendX++;
+                        break;  
+                }
+            });
             
         } else { //扫码后，进入使用遥控器模式
             
@@ -779,16 +779,16 @@ function m20(){
             $('head').append(style);
             var html = '<div id="h-title">金馆鱼遥控器</div>';
             html += '<button data-shell="up" class="shell-btn button-line button-font rdall">上拉</button>\
-				<div></div>\
-				<button id="increace" data-shell="left" class="shell-btn button-font rdall">左推</button>\
-				<button id="reduce" data-shell="right" class="shell-btn button-font rdall">右拽</button>\
-				<div></div>\
-				<button data-shell="down" class="shell-btn button-line button-font rdall">下扯</button>';
+                <div></div>\
+                <button id="increace" data-shell="left" class="shell-btn button-font rdall">左推</button>\
+                <button id="reduce" data-shell="right" class="shell-btn button-font rdall">右拽</button>\
+                <div></div>\
+                <button data-shell="down" class="shell-btn button-line button-font rdall">下扯</button>';
             $('body').append(html);
             setTimeout(function(){
-            	$('.shell-btn').click(function(){
-            		socket.emit('jgy/sendCmd', qrId, $(this).data('shell'));
-            	});
+                $('.shell-btn').click(function(){
+                    socket.emit('jgy/sendCmd', qrId, $(this).data('shell'));
+                });
             }, 500);
             
         }
@@ -804,8 +804,8 @@ function m20(){
     menus.style.right = 0;
     menus.style.bottom = 0;
     document.body.appendChild(menus);
-	
-	var isMobi = /Android|webOS|iPhone|Windows Phone|iPod|BlackBerry|SymbianOS/i.test(window.navigator.userAgent) && !/[\?&]pc(?:[=&].*|$)/.test(window.location.href);
+    
+    var isMobi = /Android|webOS|iPhone|Windows Phone|iPod|BlackBerry|SymbianOS/i.test(window.navigator.userAgent) && !/[\?&]pc(?:[=&].*|$)/.test(window.location.href);
     
     var menuBarDisp = ['', 'block'][Math.floor(Math.random()*2)];
     options = options.reverse();
@@ -964,6 +964,6 @@ function m20(){
     text: '19、磁力中毒',
     click: m19
 }, {
-	text: '20、遥控器',
-	click: m20
+    text: '20、遥控器',
+    click: m20
 }]);
