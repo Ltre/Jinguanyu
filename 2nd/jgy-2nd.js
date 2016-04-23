@@ -736,7 +736,9 @@ function m20(){
             $('#'+qrId).css('display','').qrcode({width:300,height:300,text:'http://res.miku.us/#!m20&showControlView='+qrId});
             console.log('http://res.miku.us/#!m20&showControlView='+qrId);
             var sb20 = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
+            var sb20_static = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
             sb20.node.className = 'jgy';
+            sb20_static.node.className = 'jgy';
             timing({
                 a: 1,
                 z: 10000000,
@@ -754,16 +756,20 @@ function m20(){
                 if (qrId != rToken) return;
                 switch (type) {
                     case 'up':
-                        sb20.trendY++;
+                        sb20.trendY--;
+                        sb20_static.moveY(-25);
                         break;
                     case 'down':
-                        sb20.trendY--;
+                        sb20.trendY++;
+                        sb20_static.moveY(25);
                         break;
                     case 'left':
                         sb20.trendX--;
+                        sb20_static.moveX(-25);
                         break;
                     case 'right':
                         sb20.trendX++;
+                        sb20_static.moveX(25);
                         break;  
                 }
             });
