@@ -711,6 +711,7 @@ function m19(){
 }
 //金馆鱼服务20：遥控器
 function m20(){
+	alert('稍等几秒...');
     var loadJs = function(url){
         var head = document.getElementsByTagName("head")[0] || document.documentElement;  
         var script = document.createElement("script");   
@@ -718,9 +719,11 @@ function m20(){
         script.setAttribute("type", "text/javascript");  
         script.setAttribute("src", url);
     };
-    loadJs("https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js");
-    loadJs("https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js");
     loadJs("https://cdn.bootcss.com/socket.io/1.3.5/socket.io.min.js");
+    loadJs("https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js");
+    setTimeout(function(){
+	    loadJs("https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js");
+    }, 1000);
     var timing = function(opt){opt.a=opt.a||0;opt.z=opt.z||100;opt.step=opt.step||+1;opt.delay=opt.delay||10;opt.amplTop=opt.amplTop||+0;opt.amplBot=opt.amplBot||-0;opt.onStart=opt.onStart||function(i){};opt.onTiming=opt.onTiming||function(i){};opt.onStop=opt.onStop||function(i){};opt.i=opt.a;var innerThat=this;this.ctrl={goPause:false,goStop:false,goFirst:false,goLast:false,goPrev:false,goNext:false,goTo:false};~function f(){if(opt.i<=opt.z){var randAmpl=opt.amplBot+Math.random()*(opt.amplTop-opt.amplBot);setTimeout(f,opt.delay+randAmpl);if(innerThat.ctrl.goPause){return}if(innerThat.ctrl.goStop){opt.i=opt.z+opt.step;return}if(innerThat.ctrl.goFirst){innerThat.ctrl.goFirst=false;opt.i=opt.a;return}if(innerThat.ctrl.goLast){innerThat.ctrl.goLast=false;opt.i=opt.z;return}if(innerThat.ctrl.goPrev){innerThat.ctrl.goPrev=false;opt.i-=opt.step;return}if(innerThat.ctrl.goNext){innerThat.ctrl.goNext=false;opt.i+=opt.step;return}if('number'==typeof innerThat.ctrl.goTo&&opt.a<=innerThat.ctrl.goTo&&innerThat.ctrl.goTo<=opt.z){opt.i=innerThat.ctrl.goTo;innerThat.ctrl.goTo=false;return}opt.a==opt.i&&opt.onStart(opt);opt.onTiming(opt);opt.z==opt.i&&opt.onStop(opt)}opt.i+=opt.step}()};
     
     setTimeout(function(){
