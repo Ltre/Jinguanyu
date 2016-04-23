@@ -105,18 +105,17 @@ window.Jinguanyu = function(id, x, y, src){
     this.move = function(offsetX, offsetY){
         this.moveX(offsetX);
         this.moveY(offsetY);
+        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
-    //水平移动（内核二级API）
+    //水平移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
     this.moveX = function(x){
         this.setX(this.left + x);
         this.trendX = x;
-        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
-    //纵向移动（内核二级API）
+    //纵向移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
     this.moveY = function(y){
         this.setY(this.top + y);
         this.trendY = y;
-        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
     //设定水平坐标（内核一级API）
     this.setX = function(x){
