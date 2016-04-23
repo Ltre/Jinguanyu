@@ -254,9 +254,9 @@ function m5(){
     sb5.move(1, 1);
     setInterval(function(){
         var atLeft = sb5.left <= 0;
-        var atRight = sb5.left + sb5.width >= document.body.clientWidth;
+        var atRight = sb5.left + sb5.width >= window.screen.width;
         var atTop = sb5.top <= 0;
-        var atBottom = sb5.top + sb5.height >= document.body.clientHeight;
+        var atBottom = sb5.top + sb5.height >= window.screen.height;
         console.log(sb5.top, sb5.left, sb5.trendY, sb5.trendX);
         console.log(atTop, atRight, atBottom, atLeft);
         if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
@@ -547,9 +547,9 @@ function m14(){
     div.style.backgroundColor = 'rgba(0,0,0,0.5)';
     div.style.fontFamily = '微软雅黑';
     div.style.width = '100%';
-    div.style.height = document.body.clientHeight + 'px';
-    div.style.fontSize = document.body.clientHeight / 10 + 'px';
-    div.style.lineHeight = document.body.clientHeight + 'px';
+    div.style.height = window.screen.height + 'px';
+    div.style.fontSize = window.screen.height / 10 + 'px';
+    div.style.lineHeight = window.screen.height + 'px';
     div.style.textAlign = 'center';
     div.style.position = 'fixed';
     div.style.top = 0;
@@ -564,7 +564,7 @@ function m14(){
         img.width = 100;
         img.height = 100;
         img.style.cursor = 'pointer';
-        img.style.marginTop = document.body.clientHeight/3 + 'px';
+        img.style.marginTop = window.screen.height/3 + 'px';
         div.appendChild(img);
         document.getElementById(img.id).onclick = function(evt){
             console.log({img:[evt.currentTarget.nodeName, evt.target.nodeName]});
@@ -666,7 +666,7 @@ function m18(){
         onStart: function(opt){
             Array.prototype.forEach.call(document.querySelectorAll('*'), function(e){
                 if (-1 != ['html', 'head', 'meta', 'title', 'link', 'script', 'style', 'body'].indexOf(e.tagName.toLowerCase())) return;
-                var j = new Jinguanyu('', Math.random()*document.body.clientWidth, Math.random()*document.body.clientHeight, e);
+                var j = new Jinguanyu('', Math.random()*window.screen.width, Math.random()*window.screen.height, e);
                 j.node.className += ' jgy ';
                 j.move(50*Math.random(),50*Math.random());
                 collect.push(j);
@@ -682,7 +682,7 @@ function m18(){
 }
 //金馆鱼服务19：磁力中毒
 function m19(){
-    var sb19 = new Jinguanyu('sb19'+Math.random()*10000, Math.random()*document.body.clientWidth, Math.random()*document.body.clientHeight);
+    var sb19 = new Jinguanyu('sb19'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
     sb19.node.className = 'jgy jgy-sb19';
     var stl = sb19.node.style;
     stl.border = 'dotted green 34px';
