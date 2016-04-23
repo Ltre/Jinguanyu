@@ -105,17 +105,18 @@ window.Jinguanyu = function(id, x, y, src){
     this.move = function(offsetX, offsetY){
         this.moveX(offsetX);
         this.moveY(offsetY);
-        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
     //水平移动（内核二级API）
     this.moveX = function(x){
         this.setX(this.left + x);
         this.trendX = x;
+        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
     //纵向移动（内核二级API）
     this.moveY = function(y){
         this.setY(this.top + y);
         this.trendY = y;
+        this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
     //设定水平坐标（内核一级API）
     this.setX = function(x){
@@ -748,7 +749,9 @@ function m20(){
                 },
                 onTiming: function(opt){
                     sb20.forward();
+                    opt.i%100 == 0 && sb20_static.forward(25);//static金馆鱼每0.5秒移动一次
                     sb20.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
+                    sb20_static.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
                 }
             });
             socket.emit('jgy/regCmd', qrId);
