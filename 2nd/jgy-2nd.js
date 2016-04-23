@@ -31,7 +31,7 @@ window.Jinguanyu = function(id, x, y, src){
     this.trendX = 0;//当前水平移动步长（右正左负）
     this.trendY = 0;//当前竖直移动步长（下正上负）
     this.trend = 0;//trendX与trendY的合成步长（非负数）
-    //【待测试】方盒碰撞检测支持，每次发生动作时都需调用（内核五级API）
+    //【待测试】方盒碰撞检测支持，每次发生动作时都需调用（内核四级API）
     this.promiseBoxLimit = function(left1, top1, left2, top2, callback){
         left1 = left1 || 0;
         top1 = top1 || 0;
@@ -55,21 +55,21 @@ window.Jinguanyu = function(id, x, y, src){
             }
         }
     };
-    //前进（内核四级API）
+    //前进（内核三级API）
     this.forward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
         var ratio = offset / this.trend;
         this.move(this.trendX * ratio, this.trendY * ratio);
     };
-    //后退（内核四级API）
+    //后退（内核三级API）
     this.backward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
         var ratio = offset / this.trend;
         this.move(- this.trendX * ratio, - this.trendY * ratio);
     };
-    //左转（内核四级API）
+    //左转（内核三级API）
     this.leftward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -80,7 +80,7 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(- this.trendX * ratio, this.trendY * ratio);
         }
     };
-    //右转（内核四级API）
+    //右转（内核三级API）
     this.rightward = function(offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -91,7 +91,7 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(this.trendX * ratio, - this.trendY * ratio);
         }
     };
-    //任意角度转（以当前运动方向，逆时针旋转的角度）（内核四级API）
+    //任意角度转（以当前运动方向，逆时针旋转的角度）（内核三级API）
     this.angleward = function(angle, offset){
         offset = offset || this.trend;
         if (0 == this.trend) return;
@@ -101,21 +101,31 @@ window.Jinguanyu = function(id, x, y, src){
         var offsetY = Math.cos(oldAngle + Math.PI*angle/180) * offset;
         this.move(offsetX, offsetY);
     };
-    //基础移动（内核三级API）
+    //基础合成移动（内核二级API）
     this.move = function(offsetX, offsetY){
-        this.moveX(offsetX);
-        this.moveY(offsetY);
+    	offsetX = offsetX || this.trendX;
+    	offsetY = offsetY || this.trendY;
+        this.setX(this.left + offsetX);
+        this.setY(this.top + offsetY);
+        this.trendX = offsetX;
+        this.trendY = offsetY;
         this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
     };
-    //水平移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
+    //基础水平移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
     this.moveX = function(x){
         this.setX(this.left + x);
+        this.setY(this.top);
         this.trendX = x;
+        this.trendY = 0;
+        this.trend = Math.abs(this.trendX);
     };
-    //纵向移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
+    //基础纵向移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
     this.moveY = function(y){
+        this.setX(this.left);
         this.setY(this.top + y);
+        this.trendX = 0;
         this.trendY = y;
+        this.trend = Math.abs(this.trendY);
     };
     //设定水平坐标（内核一级API）
     this.setX = function(x){
@@ -748,7 +758,7 @@ function m20(){
                 },
                 onTiming: function(opt){
                     sb20.forward();
-                    opt.i%100 == 0 && sb20_static.forward(25);//static金馆鱼每0.5秒移动一次
+                    opt.i%50 == 0 && sb20_static.forward(25);//static金馆鱼每0.5秒移动一次
                     sb20.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
                     sb20_static.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
                 }
