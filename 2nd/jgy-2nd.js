@@ -508,8 +508,8 @@ function m12(){
                 onTiming: function(options){
                     sb12.setWidth(sb12.width + 1);
                     sb12.setHeight(sb12.height + 1);                    
-                    sb12.setX(document.body.clientWidth/2 - sb12.width/2);
-                    sb12.setY(document.body.clientHeight/2 - sb12.height/2);
+                    sb12.setX(window.screen.width/2 - sb12.width/2);
+                    sb12.setY(window.screen.height/2 - sb12.height/2);
                 },
                 onStop: function(options){//最后关头销毁自身，并进行核裂变
                     sb12.node.outerHTML = '';
