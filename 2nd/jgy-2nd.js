@@ -35,8 +35,8 @@ window.Jinguanyu = function(id, x, y, src){
     this.promiseBoxLimit = function(left1, top1, left2, top2, callback){
         left1 = left1 || 0;
         top1 = top1 || 0;
-        left2 = left2 || document.body.clientWidth;
-        top2 = top2 || document.body.clientHeight;
+        left2 = left2 || document.body.scrollWidth;
+        top2 = top2 || document.body.scrollHeight;
         var atLeft = this.left <= left1;
         var atRight = this.left + this.width >= left2;
         var atTop = this.top <= top1;
@@ -245,8 +245,8 @@ function m3(){
 }
 //金馆鱼服务4：扔垃圾
 function m4(){
-    var x = Math.random() * (window.screen.width - 100) + 50;
-    var y = Math.random() * (window.screen.height - 50) + 50;
+    var x = Math.random() * (document.body.scrollWidth - 100) + 50;
+    var y = Math.random() * (document.body.scrollHeight - 50) + 50;
     var sb4 = new Jinguanyu('sb4'+Math.random()*100000, x, y);
     sb4.node.className = 'jgy';
     !function(sb4inner){
@@ -264,9 +264,9 @@ function m5(){
     sb5.move(1, 1);
     setInterval(function(){
         var atLeft = sb5.left <= 0;
-        var atRight = sb5.left + sb5.width >= window.screen.width;
+        var atRight = sb5.left + sb5.width >= document.body.scrollWidth;
         var atTop = sb5.top <= 0;
-        var atBottom = sb5.top + sb5.height >= window.screen.height;
+        var atBottom = sb5.top + sb5.height >= document.body.scrollHeight;
         console.log(sb5.top, sb5.left, sb5.trendY, sb5.trendX);
         console.log(atTop, atRight, atBottom, atLeft);
         if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
@@ -284,16 +284,16 @@ function m5(){
 function m6(){
     var tmp = document.createElement('div');//添加临时遮罩层
     tmp.innerText = '点击屏幕任意两个位置';
-    tmp.style.fontSize = window.screen.height / 10 + 'px';
+    tmp.style.fontSize = document.body.scrollHeight / 10 + 'px';
     tmp.style.fontFamily = '微软雅黑';
     tmp.style.textAlign = 'center';
-    tmp.style.lineHeight = window.screen.height + 'px';
+    tmp.style.lineHeight = document.body.scrollHeight + 'px';
     tmp.style.zIndex = '+1000';
     tmp.style.position = 'fixed';
     tmp.style.left = '0';
     tmp.style.top = '0';
-    tmp.style.width = window.screen.width + 'px';
-    tmp.style.height = window.screen.height + 'px';
+    tmp.style.width = document.body.scrollWidth + 'px';
+    tmp.style.height = document.body.scrollHeight + 'px';
     tmp.style.backgroundColor = 'rgba(0,0,0,0.5)';
     tmp.style.cursor = 'pointer';
     document.body.appendChild(tmp);
@@ -313,7 +313,7 @@ function m6(){
                 var moveX = end[0] - start[0];
                 var moveY = end[1] - start[1];
                 var pathLen = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
-                var screenLen = Math.sqrt(Math.pow(window.screen.width, 2) + Math.pow(window.screen.height, 2));
+                var screenLen = Math.sqrt(Math.pow(document.body.scrollWidth, 2) + Math.pow(document.body.scrollHeight, 2));
                 var speed = Math.ceil((1 - pathLen / screenLen) * 100);
                 console.log({speed:speed});
                 var minMoveX = moveX, minMoveY = moveY;
@@ -379,16 +379,16 @@ function m9(){
     //手动移动，导出路径串
     var tmp = document.createElement('div');//添加临时遮罩层
     tmp.innerHTML = '按住鼠标，随意划一条线，随后松开';
-    tmp.style.fontSize = window.screen.height / 15 + 'px';
+    tmp.style.fontSize = document.body.scrollHeight / 15 + 'px';
     tmp.style.fontFamily = '微软雅黑';
     tmp.style.textAlign = 'center';
-    tmp.style.lineHeight = window.screen.height + 'px';
+    tmp.style.lineHeight = document.body.scrollHeight + 'px';
     tmp.style.zIndex = '+1000';
     tmp.style.position = 'fixed';
     tmp.style.left = '0';
     tmp.style.top = '0';
-    tmp.style.width = window.screen.width + 'px';
-    tmp.style.height = window.screen.height + 'px';
+    tmp.style.width = document.body.scrollWidth + 'px';
+    tmp.style.height = document.body.scrollHeight + 'px';
     tmp.style.backgroundColor = 'rgba(0,0,0,0.5)';
     tmp.style.cursor = 'pointer';
     document.body.appendChild(tmp);
@@ -434,6 +434,24 @@ function m11(){
 }
 //金馆鱼服务12：复杂转向+反射
 function m12(){
+	console.log('fuck start');
+	console.log( 'document.body.clientWidth', document.body.clientWidth);
+	console.log( 'document.body.clientHeight', document.body.clientHeight);
+	console.log( 'document.body.offsetWidth', document.body.offsetWidth);
+	console.log( 'document.body.offsetHeight', document.body.offsetHeight);
+	console.log( 'document.body.scrollWidth', document.body.scrollWidth);
+	console.log( 'document.body.scrollHeight', document.body.scrollHeight);
+	console.log( 'document.body.scrollTop', document.body.scrollTop);
+	console.log( 'document.body.scrollLeft', document.body.scrollLeft);
+	console.log( 'window.screenLeft', window.screenLeft);
+	console.log( 'window.screenTop', window.screenTop);
+	console.log( 'window.screen.width', window.screen.width);
+	console.log( 'window.screen.height', window.screen.height);
+	console.log('window.screen.availHeight', window.screen.availHeight);
+	console.log('window.screen.availWidth', window.screen.availWidth);
+	console.log('window.screen.colorDepth', window.screen.colorDepth);
+	console.log('window.screen.deviceXDPI', window.screen.deviceXDPI);
+	console.log('fuck end');
     var that = this;
     if (that.inZuangbi) {
         alert('有人在装逼，请稍后再装！');
@@ -462,8 +480,8 @@ function m12(){
     //状态面板
     var div = document.createElement('div');
     div.style.fontFamily = '微软雅黑';
-    div.style.fontSize = window.screen.availWidth / 10 + 'px';
-    div.style.lineHeight = window.screen.availHeight + 'px';
+    div.style.fontSize = document.body.scrollWidth / 10 + 'px';
+    div.style.lineHeight = document.body.scrollHeight + 'px';
     div.style.textAlign = 'center';
     div.style.position = 'fixed';
     div.style.top = 0;
@@ -481,14 +499,14 @@ function m12(){
             sb12.move(2, 2);
         },
         onTiming: function(options){
-            console.log(options.i);
+            //console.log(options.i);
             //这里文字居中有BUG
             div.innerHTML = '<span style="textAlign:center;">剩余<span style="color:red;">' + (options.z - options.i) + '</span>装逼值<span>';
             //边缘检测
             var atLeft = sb12.left <= 0;
-            var atRight = sb12.left + sb12.width >= window.screen.availWidth;
+            var atRight = sb12.left + sb12.width >= document.body.scrollWidth;
             var atTop = sb12.top <= 0;
-            var atBottom = sb12.top + sb12.height >= window.screen.availHeight;
+            var atBottom = sb12.top + sb12.height >= document.body.scrollHeight;
             if (atLeft&&atTop || atTop&&atRight || atRight&&atBottom || atBottom&&atLeft) {
                 sb12.move(-sb12.trendX, -sb12.trendY);
             } else if (atTop || atBottom) {
@@ -510,7 +528,7 @@ function m12(){
             }
         },
         onStop: function(options){
-            console.log(options.i);
+            //console.log(options.i);
             div.outerHTML = '';
             timing({
                 z: 200,
@@ -518,8 +536,8 @@ function m12(){
                 onTiming: function(options){
                     sb12.setWidth(sb12.width + 1);
                     sb12.setHeight(sb12.height + 1);                    
-                    sb12.setX(window.screen.availWidth/2 - sb12.width/2);
-                    sb12.setY(window.screen.availHeight/2 - sb12.height/2);
+                    sb12.setX(document.body.scrollWidth/2 - sb12.width/2);
+                    sb12.setY(document.body.scrollHeight/2 - sb12.height/2);
                 },
                 onStop: function(options){//最后关头销毁自身，并进行核裂变
                     sb12.node.outerHTML = '';
@@ -556,9 +574,9 @@ function m14(){
     div.style.backgroundColor = 'rgba(0,0,0,0.5)';
     div.style.fontFamily = '微软雅黑';
     div.style.width = '100%';
-    div.style.height = window.screen.height + 'px';
-    div.style.fontSize = window.screen.height / 10 + 'px';
-    div.style.lineHeight = window.screen.height + 'px';
+    div.style.height = document.body.scrollHeight + 'px';
+    div.style.fontSize = document.body.scrollHeight / 10 + 'px';
+    div.style.lineHeight = document.body.scrollHeight + 'px';
     div.style.textAlign = 'center';
     div.style.position = 'fixed';
     div.style.top = 0;
@@ -573,7 +591,7 @@ function m14(){
         img.width = 100;
         img.height = 100;
         img.style.cursor = 'pointer';
-        img.style.marginTop = window.screen.height/3 + 'px';
+        img.style.marginTop = document.body.scrollHeight/3 + 'px';
         div.appendChild(img);
         document.getElementById(img.id).onclick = function(evt){
             console.log({img:[evt.currentTarget.nodeName, evt.target.nodeName]});
@@ -600,7 +618,7 @@ function m14(){
 function m15(){
     var commonDiv = document.createElement('div');
     commonDiv.style.width = '100%';
-    commonDiv.style.height = document.body.clientHeight + 'px';
+    commonDiv.style.height = document.body.scrollHeight + 'px';
     document.body.appendChild(commonDiv);
     window.m15tmp = {};
     commonDiv.ondragstart = function(evt){
@@ -675,7 +693,7 @@ function m18(){
         onStart: function(opt){
             Array.prototype.forEach.call(document.querySelectorAll('*'), function(e){
                 if (-1 != ['html', 'head', 'meta', 'title', 'link', 'script', 'style', 'body'].indexOf(e.tagName.toLowerCase())) return;
-                var j = new Jinguanyu('', Math.random()*window.screen.width, Math.random()*window.screen.height, e);
+                var j = new Jinguanyu('', Math.random()*document.body.scrollWidth, Math.random()*document.body.scrollHeight, e);
                 j.node.className += ' jgy ';
                 j.move(50*Math.random(),50*Math.random());
                 collect.push(j);
@@ -691,7 +709,7 @@ function m18(){
 }
 //金馆鱼服务19：磁力中毒
 function m19(){
-    var sb19 = new Jinguanyu('sb19'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
+    var sb19 = new Jinguanyu('sb19'+Math.random()*10000, Math.random()*document.body.scrollWidth, Math.random()*document.body.scrollHeight);
     sb19.node.className = 'jgy jgy-sb19';
     var stl = sb19.node.style;
     stl.border = 'dotted green 34px';
@@ -744,8 +762,8 @@ function m20(){
             $('body').append('<div id="'+qrId+'" style="position: fixed; z-index: 20; top: 50px; left: 0px; display: none;"></div>');
             $('#'+qrId).css('display','').qrcode({width:300,height:300,text:'http://res.miku.us/#!m20&showControlView='+qrId});
             console.log('http://res.miku.us/#!m20&showControlView='+qrId);
-            var sb20 = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
-            var sb20_static = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*window.screen.width, Math.random()*window.screen.height);
+            var sb20 = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*document.body.scrollWidth, Math.random()*document.body.scrollHeight);
+            var sb20_static = new Jinguanyu('sb20'+Math.random()*10000, Math.random()*document.body.scrollWidth, Math.random()*document.body.scrollHeight);
             sb20.node.className = 'jgy';
             sb20_static.node.className = 'jgy';
             timing({
@@ -758,8 +776,8 @@ function m20(){
                 onTiming: function(opt){
                     sb20.forward();
                     opt.i%50 == 0 && sb20_static.forward(25);//static金馆鱼每0.5秒移动一次
-                    sb20.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
-                    sb20_static.promiseBoxLimit(0, 0, window.screen.width, window.screen.height);//时刻检测方盒碰撞
+                    sb20.promiseBoxLimit(0, 0, document.body.scrollWidth, document.body.scrollHeight);//时刻检测方盒碰撞
+                    sb20_static.promiseBoxLimit(0, 0, document.body.scrollWidth, document.body.scrollHeight);//时刻检测方盒碰撞
                 }
             });
             socket.emit('jgy/regCmd', qrId);
