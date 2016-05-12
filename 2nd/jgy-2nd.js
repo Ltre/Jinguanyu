@@ -153,6 +153,7 @@ window.Jinguanyu = function(id, x, y, src){
         this.node.style.left = this.left + 'px';
         this.node.style.top = this.top + 'px';
     };
+    //旧拖放代码，缺陷：拖动过快会脱离；非全屏时拖动结束时，停放位置错误。
     this.bind = function(){
         this.node.ondrag = function(evt){
             _this.setX(evt.clientX - _this.dragTmp.x);
@@ -165,6 +166,21 @@ window.Jinguanyu = function(id, x, y, src){
             _this.setX(evt.offsetX - _this.dragTmp.x - _this.width);
             _this.setY(evt.offsetY - _this.dragTmp.y - _this.height/2);
             delete _this.dragTmp;
+        };
+        var _getClientXY = function(e){ //待调用
+            var x = 0, y = 0;
+            if (e.pageX||e.pageY) {
+                x = e.pageX;
+                y = e.pageY;
+            } else if(e.clientX||e.clientY) {
+                x = e.clientX +
+                    document.documentElement.scrollLeft +
+                    document.body.scrollLeft;
+                y = e.clientY +
+                    document.documentElement.scrollTop +
+                    document.body.scrollTop;
+            }
+            return {x:x,y:y};
         };
     };
     this.create = function(id, x, y){
