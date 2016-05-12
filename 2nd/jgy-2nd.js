@@ -22,7 +22,8 @@ window.Jinguanyu = function(id, x, y, src){
         'http://res.miku.us/res/img/default/2016/01/10/144133-93-hex109.png',
         'http://res.miku.us/res/img/default/2016/04/13/140655-615-hex3.gif',
         'http://res.miku.us/res/img/default/2016/04/13/140631-591-hex10d.gif',
-        'http://res.miku.us/res/img/default/2016/04/12/180058-258-hex135.png'
+        'http://res.miku.us/res/img/default/2016/04/12/180058-258-hex135.png',
+        'http://s2.res.miku.us/res/img/default/2016/05/11/170415-455-hex302.png'
     ])[Math.floor(Math.random()*_tmpImgs.length)];
     this.left = 0;
     this.top = 0;
