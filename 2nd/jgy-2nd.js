@@ -14,7 +14,7 @@ window.Jinguanyu = function(id, x, y, src){
     this.width = 100;
     this.height = 100;
     var _tmpImgs; this.src = src || (_tmpImgs=[
-        'http://miku-us-static.smartgslb.com/res/biz/danmu/jinguanyu.gif',
+        'http://res.miku.us/res/img/tu-miku-us-test/20150907-032418458.gif',
         'http://res.miku.us/res/img/default/2016/02/11/212745-265-hex302.gif',
         'http://res.miku.us/res/img/default/2016/02/11/212637-197-hex294.gif',
         'http://res.miku.us/res/img/default/2016/01/08/162353-433-hex2d6.gif',
