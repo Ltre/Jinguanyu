@@ -1,0 +1,23 @@
+{
+  "name": "jinguanyu",
+  "version": "1.0.0",
+  "description": "Jinguanyu Joke!",
+  "main": "2nd/jgy-2nd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ltre/Jinguanyu.git"
+  },
+  "keywords": [
+    "Jinguanyu",
+    "joke"
+  ],
+  "author": "Ltre Oreki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ltre/Jinguanyu/issues"
+  },
+  "homepage": "https://github.com/Ltre/Jinguanyu#readme"
+}
