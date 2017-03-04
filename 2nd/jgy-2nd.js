@@ -44,8 +44,9 @@ window.Jinguanyu = function(id, x, y, src){
     this.top = 0;
     this.trendX = 0;//当前水平移动步长（右正左负）
     this.trendY = 0;//当前竖直移动步长（下正上负）
-    this.trend = 0;//trendX与trendY的合成步长（非负数）
-    //【待测试】方盒碰撞检测支持，每次发生动作时都需调用（内核四级API）
+    this.trend = 0;//trendX与trendY的合成步长（非负数）。在内核二级API调用后，才会产生动力，即trend值，方使内核三级API有效。
+    this.angle = null;//以纵坐标轴向下方向为基准，逆时针旋转至当前方向时，与基准方向的夹角。在发生移动时，角度将被设置。
+    //[内核四级API]【待测试】方盒碰撞检测支持，每次发生动作时都需调用
     this.promiseBoxLimit = function(left1, top1, left2, top2, callback){
         left1 = left1 || 0;
         top1 = top1 || 0;
@@ -69,24 +70,24 @@ window.Jinguanyu = function(id, x, y, src){
             }
         }
     };
-    //前进（内核三级API）
+    //[内核三级API]前进
     this.forward = function(offset){
         offset = offset || this.trend;
-        if (0 == this.trend) return;
+        if (0 == this.trend) return;//需要内核二级API提供的动力
         var ratio = offset / this.trend;
         this.move(this.trendX * ratio, this.trendY * ratio);
     };
-    //后退（内核三级API）
+    //[内核三级API]后退
     this.backward = function(offset){
         offset = offset || this.trend;
-        if (0 == this.trend) return;
+        if (0 == this.trend) return;//需要内核二级API提供的动力
         var ratio = offset / this.trend;
         this.move(- this.trendX * ratio, - this.trendY * ratio);
     };
-    //左转（内核三级API）
+    //[内核三级API]左转
     this.leftward = function(offset){
         offset = offset || this.trend;
-        if (0 == this.trend) return;
+        if (0 == this.trend) return;//需要内核二级API提供的动力
         var ratio = offset / this.trend;
         if (this.trendX * this.trendY >= 0) {
             this.move(this.trendX * ratio, - this.trendY * ratio);
@@ -94,10 +95,10 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(- this.trendX * ratio, this.trendY * ratio);
         }
     };
-    //右转（内核三级API）
+    //[内核三级API]右转
     this.rightward = function(offset){
         offset = offset || this.trend;
-        if (0 == this.trend) return;
+        if (0 == this.trend) return;//需要内核二级API提供的动力
         var ratio = offset / this.trend;
         if (this.trendX * this.trendY >= 0) {
             this.move(- this.trendX * ratio, this.trendY * ratio);
@@ -105,48 +106,62 @@ window.Jinguanyu = function(id, x, y, src){
             this.move(this.trendX * ratio, - this.trendY * ratio);
         }
     };
-    //任意角度转（以当前运动方向，逆时针旋转的角度）（内核三级API）
+    //[内核三级API]任意角度转向（以当前运动方向，逆时针旋转的角度）
     this.angleward = function(angle, offset){
         offset = offset || this.trend;
-        if (0 == this.trend) return;
+        if (0 == this.trend) return;//需要内核二级API提供的动力
         var ratio = offset / this.trend;
-        var oldAngle = Math.asin(this.trendX/this.trend);
-        var offsetX = Math.sin(oldAngle + Math.PI*angle/180) * offset;
-        var offsetY = Math.cos(oldAngle + Math.PI*angle/180) * offset;
+        //var oldAngle = Math.asin(this.trendX/this.trend);
+        var offsetX = Math.sin(this.angle + Math.PI*angle/180) * offset;
+        var offsetY = Math.cos(this.angle + Math.PI*angle/180) * offset;
         this.move(offsetX, offsetY);
     };
-    //基础合成移动（内核二级API）
+    //[内核二级API] 基础任意角（以纵坐标轴向下方向，逆时针旋转指定角度所指的方向）移动。由于trend值的计算问题，不建议直接设置，应该以调用moveY()来替代之
+    this.moveAngle = function(angle, offset){
+        var offsetX = Math.sin(Math.PI*angle/180) * offset;
+        var offsetY = Math.cos(Math.PI*angle/180) * offset;
+        this.setX(this.left + offsetX);
+        this.setY(this.top + offsetY);
+        this.trendX = offsetX;
+        this.trendY = offsetY;
+        this.trend = offset;
+        this.angle = angle;
+    };
+    //[内核二级API]基础合成移动
     this.move = function(offsetX, offsetY){
-    	offsetX = offsetX || this.trendX;
-    	offsetY = offsetY || this.trendY;
+    	var offsetX = offsetX || this.trendX;
+    	var offsetY = offsetY || this.trendY;
         this.setX(this.left + offsetX);
         this.setY(this.top + offsetY);
         this.trendX = offsetX;
         this.trendY = offsetY;
         this.trend = Math.sqrt(Math.pow(this.trendX, 2) + Math.pow(this.trendY, 2));
+        this.angle = 180 * Math.atan(this.trendX / this.trendY) / Math.PI;
     };
-    //基础水平移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
+    //[内核二级API]基础水平移动。由于trend值的计算问题，不建议直接设置，应该以调用moveX()来替代之
     this.moveX = function(x){
         this.setX(this.left + x);
         this.setY(this.top);
         this.trendX = x;
         this.trendY = 0;
         this.trend = Math.abs(this.trendX);
+        this.angle = x >= 0 ? 90 : -90;
     };
-    //基础纵向移动（内核二级API），由于trend值的计算问题，不建议直接调用，应该以调用move()来替代之
+    //[内核二级API]基础纵向移动。由于trend值的计算问题，不建议直接设置，应该以调用moveY()来替代之
     this.moveY = function(y){
         this.setX(this.left);
         this.setY(this.top + y);
         this.trendX = 0;
         this.trendY = y;
         this.trend = Math.abs(this.trendY);
+        this.angle = y >= 0 ? 0 : 180;
     };
-    //设定水平坐标（内核一级API）
+    //[内核一级API]设定水平坐标
     this.setX = function(x){
         this.left = x;
         this.node.style.left = this.left + 'px';
     };
-    //设定纵向坐标（内核一级API）
+    //[内核一级API]设定纵向坐标
     this.setY = function(y){
         this.top = y;
         this.node.style.top = this.top + 'px';
@@ -328,7 +343,6 @@ function m6(){
     tmp.style.cursor = 'pointer';
     document.body.appendChild(tmp);
     tmp.onclick = function(evt){
-        //debugger;
         if (undefined === tmp.trendPath) tmp.trendPath = {};
         if (undefined === tmp.trendPath.start) {
             tmp.trendPath.start = [evt.clientX, evt.clientY];
@@ -862,6 +876,96 @@ function m20(){
         }
     }, 2000);
 }
+//金馆鱼服务21：自定义曲线（失败）(折线每段越短，则曲线越平滑)
+function m21(){
+    var timing = function(opt){opt.a=opt.a||0;opt.z=opt.z||100;opt.step=opt.step||+1;opt.delay=opt.delay||10;opt.amplTop=opt.amplTop||+0;opt.amplBot=opt.amplBot||-0;opt.onStart=opt.onStart||function(i){};opt.onTiming=opt.onTiming||function(i){};opt.onStop=opt.onStop||function(i){};opt.i=opt.a;var innerThat=this;this.ctrl={goPause:false,goStop:false,goFirst:false,goLast:false,goPrev:false,goNext:false,goTo:false};~function f(){if(opt.i<=opt.z){var randAmpl=opt.amplBot+Math.random()*(opt.amplTop-opt.amplBot);setTimeout(f,opt.delay+randAmpl);if(innerThat.ctrl.goPause){return}if(innerThat.ctrl.goStop){opt.i=opt.z+opt.step;return}if(innerThat.ctrl.goFirst){innerThat.ctrl.goFirst=false;opt.i=opt.a;return}if(innerThat.ctrl.goLast){innerThat.ctrl.goLast=false;opt.i=opt.z;return}if(innerThat.ctrl.goPrev){innerThat.ctrl.goPrev=false;opt.i-=opt.step;return}if(innerThat.ctrl.goNext){innerThat.ctrl.goNext=false;opt.i+=opt.step;return}if('number'==typeof innerThat.ctrl.goTo&&opt.a<=innerThat.ctrl.goTo&&innerThat.ctrl.goTo<=opt.z){opt.i=innerThat.ctrl.goTo;innerThat.ctrl.goTo=false;return}opt.a==opt.i&&opt.onStart(opt);opt.onTiming(opt);opt.z==opt.i&&opt.onStop(opt)}opt.i+=opt.step}()};
+    //曲线积分：由弧段组成
+    var curveData = [
+        [
+            50,      //转向角度(C)，最大359度
+            5,      //每执行一次转向角度调整，所需行进的直线路程。当前每行进5px，则按角度调整方向
+            60,     //速度(px/s)
+            2000    //此弧段持续时间(ms)
+        ],
+        [30, 2, 50, 5000],
+        [15, 3, 100, 8000],
+        [10, 4, 70, 3000]
+    ];
+    var sb21 = new Jinguanyu('sb21'+Math.random()*10000, 150, 150);
+    sb21.node.className = 'jgy';
+    var timeout = 0;
+    var timingIslock = {};
+    var ivMap = {};
+    for (var i in curveData) {
+        timingIslock[i] = true;
+        var rad = curveData[i];
+        var radLen = rad[3] / 1000 * rad[2];//此弧段长度(px)
+        ~ function(rad, radLen, iii){
+            ivMap[iii] = setInterval(function(){
+                if (iii != 0 && timingIslock[iii]) return;//保证以任务串行执行
+                clearInterval(ivMap[iii]);
+                
+                var delay = 10;//10ms作为一次interval，使因js执行时间造成的误差较小
+                var loopNum = rad[3] / delay;
+                //var trendPerLoop = rad[2] / 1000 * delay;//每次循环，行进里程
+                var trendPerLoop = radLen / loopNum;
+                var lineNumPerLoop = trendPerLoop / rad[1];
+                var sumTrendWent = 0;//此弧段累计已行进里程
+                var sumTrendAtlastGo = 0;//上次行进时，累计的里程（用于每次循环行进小于1px的情况）
+                var startTime = + new Date;
+                timing({
+                    a: 0,
+                    z: loopNum - 1,
+                    step: 1,
+                    delay: delay,
+                    onStart: function(opt){
+                        sb21.moveAngle(30, 1);//设定开始方向为纵轴向下，并行进1px
+                    },
+                    onTiming: function(opt){
+                        console.log({now: new Date - startTime});
+                        console.log({i:iii, opt_i:opt.i});
+                        
+                        sumTrendWent += trendPerLoop;
+                        var gapByLastGo = sumTrendWent - sumTrendAtlastGo;
+                        var realTrend = 0;
+                        if (gapByLastGo >= rad[1]) {
+                            sb21.angleward(rad[0], 10);
+                        } else {
+                            sb21.forward(trendPerLoop);
+                        }
+                        
+                        
+                        /* sumTrendWent += trendPerLoop;
+                        var gapByLastGo = sumTrendWent - sumTrendAtlastGo;
+                        var realTrend = 0;
+                        var canGo = false;
+                        if (trendPerLoop >= 1) {
+                            canGo = true;
+                            realTrend = trendPerLoop;
+                        } else if (gapByLastGo > 1) {
+                            canGo = true;
+                            realTrend = gapByLastGo;
+                        }
+                        
+                        console.log({gapByLastGo: gapByLastGo, canGo:canGo, sumTrendWent:sumTrendWent, sumTrendAtlastGo:sumTrendAtlastGo, trendPerLoop:trendPerLoop});
+                        if (canGo) {
+                            sumTrendAtlastGo = sumTrendWent;
+                            console.log({rad0: rad[0], realTrend: realTrend});
+                            sb21.angleward(rad[0], realTrend);
+                            sb21.promiseBoxLimit();
+                        } */
+                    },
+                    onStop: function(opt){
+                        if ((iii + 1) in timingIslock) {
+                            timingIslock[iii + 1] = false;
+                        }
+                    }
+                });
+            }, 1);
+        }(rad, radLen, Number(i));
+        timeout += rad[3];
+    }
+}
 
 
 //实验控制菜单
@@ -1034,4 +1138,7 @@ function m20(){
 }, {
     text: '20、遥控器',
     click: m20
+}, {
+    text: '21、自定义曲线（开发中）',
+    click: m21
 }]);
