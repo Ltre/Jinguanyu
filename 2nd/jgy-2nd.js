@@ -34,14 +34,15 @@ window.Jinguanyu = function(id, x, y, src){
         'http://res.miku.us/res/img/default/2016/07/28/201547-147-hex1ac.png',
         'http://res.miku.us/res/img/default/2016/07/29/160432-472-hex3ad.gif',
         'http://res.miku.us/res/img/default/2016/07/18/231449-889-hexa5.gif',
-        'http://s2.res.miku.us/res/img/default/2016/06/14/182816-96-hex2c4.gif',
+        'http://res.miku.us/res/img/default/2016/06/14/182816-96-hex2c4.gif',
         'http://res.miku.us/res/img/default/2016/07/30/122738-858-hex69.gif',
         'http://res.miku.us/res/img/default/2016/07/30/122923-963-hex20b.gif',
         'http://res.miku.us/res/img/default/2016/08/02/175014-414-hex15e.gif',
         'http://res.miku.us/res/img/default/2016/08/20/140041-841-hex23d.png',
         'http://res.miku.us/res/img/default/2017/08/12/160545-145-hex1c6.gif',
         'http://res.miku.us/res/img/default/2017/08/26/140556-556-hex324.png',
-        'http://res.miku.us/res/img/default/2017/08/22/182850-730-hex211.gif'
+        'http://res.miku.us/res/img/default/2017/08/22/182850-730-hex211.gif',
+        'http://res.miku.us/res/img/default/2017/08/26/140556-556-hex324.png',
     ])[Math.floor(Math.random()*_tmpImgs.length)];
     this.left = 0;
     this.top = 0;
