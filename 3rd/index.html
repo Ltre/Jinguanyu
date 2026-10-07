@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0c" />
+  <title>金馆鱼 / Meme Motion Lab</title>
+  <link rel="stylesheet" href="res/css/jgy-studio.css?v=20261007" />
+</head>
+<body>
+  <main id="jgy-stage" aria-label="金馆鱼表情包动作舞台">
+    <div class="stage-watermark" aria-hidden="true">
+      <span>JGY</span>
+      <small>MEME MOTION LAB</small>
+    </div>
+  </main>
+
+  <!--
+    旧动作内核：保持原文件、原 m0~m20 行为不变。
+    现代 UI 只在加载完成后增强 #jgy-menus，并在用户主动选择演员时才包一层 Jinguanyu。
+  -->
+  <script src="res/js/jgy-2nd.js?v=legacy" charset="utf-8"></script>
+
+  <!-- 新 UI / 插件宿主 -->
+  <script src="res/js/jgy-studio.js?v=20261007" charset="utf-8"></script>
+
+  <!--
+    ==================== 开发者：新增插件只改这里 ====================
+    1) 把插件 JS 放进 /plugins/
+    2) 在下面按顺序追加 <script src="/plugins/xxx.js"></script>
+    3) 插件内部调用 window.JGYStudio.registerPlugin({...})
+    ================================================================
+  -->
+  <script src="plugins/example-pulse.js?v=20261007" charset="utf-8"></script>
+</body>
+</html>
